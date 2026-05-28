@@ -258,6 +258,21 @@ body {
 #screen-game {
   justify-content: flex-start;
   padding: 0;
+  overflow: hidden;
+}
+
+/* 遊戲主內容捲動容器 */
+.game-scroll-wrap {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 1.5rem;
 }
 
 /* 章節頂欄 */
@@ -332,9 +347,8 @@ body {
   width: 100%;
   max-width: 800px;
   padding: 0.8rem 1.2rem;
-  flex: 1 1 auto;
+  flex: 0 0 auto;
   align-items: flex-start;
-  min-height: 0;
 }
 
 .character-portrait {
