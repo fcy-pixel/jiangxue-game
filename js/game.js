@@ -206,6 +206,7 @@ const GameEngine = (() => {
         sendChat();
       }
     };
+    setupMicButton();
   }
 
   function hideChatArea() {
@@ -214,6 +215,52 @@ const GameEngine = (() => {
     if ($('chat-input')) $('chat-input').value = '';
     const suggestEl = $('chat-suggestions');
     if (suggestEl) { suggestEl.innerHTML = ''; suggestEl.style.display = 'none'; }
+    stopMic();
+  }
+
+  /* ---------- 廣東話語音輸入 ---------- */
+  let _recognition = null;
+  let _micListening = false;
+
+  function stopMic() {
+    if (_recognition && _micListening) { try { _recognition.stop(); } catch(e) {} }
+  }
+
+  function setupMicButton() {
+    const micBtn = $('btn-mic');
+    if (!micBtn) return;
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) { micBtn.style.display = 'none'; return; }
+
+    micBtn.onclick = () => {
+      if (_micListening) { stopMic(); return; }
+      _recognition = new SR();
+      _recognition.lang = 'zh-HK';
+      _recognition.interimResults = true;
+      _recognition.maxAlternatives = 1;
+      _recognition.continuous = false;
+
+      _recognition.onstart = () => {
+        _micListening = true;
+        micBtn.classList.add('listening');
+        micBtn.title = '點擊停止錄音';
+      };
+      _recognition.onresult = (ev) => {
+        const t = ev.results[0][0].transcript;
+        $('chat-input').value = t;
+      };
+      _recognition.onend = () => {
+        _micListening = false;
+        micBtn.classList.remove('listening');
+        micBtn.title = '廣東話語音輸入';
+      };
+      _recognition.onerror = (ev) => {
+        console.warn('語音識別錯誤:', ev.error);
+        _micListening = false;
+        micBtn.classList.remove('listening');
+      };
+      _recognition.start();
+    };
   }
 
   /* ---------- 自由對話：發送訊息 ---------- */

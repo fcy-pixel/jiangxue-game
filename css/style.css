@@ -707,6 +707,31 @@ body {
 .btn-send:active { transform: scale(0.97); }
 .btn-send:disabled { background: #4a3820; color: #6b6b5a; cursor: not-allowed; }
 
+.btn-mic {
+  font-size: 1.1rem;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid #4a3820;
+  color: var(--rice);
+  padding: 0.4em 0.65em;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background 0.2s, border-color 0.2s;
+  align-self: stretch;
+  white-space: nowrap;
+  line-height: 1;
+}
+.btn-mic:hover { background: rgba(255,255,255,0.14); }
+.btn-mic.listening {
+  color: #ff6b6b;
+  border-color: #ff6b6b;
+  animation: mic-pulse 0.9s ease-in-out infinite;
+}
+.btn-mic:disabled { opacity: 0.3; cursor: not-allowed; }
+@keyframes mic-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
 .chat-hint {
   font-size: 0.72rem;
   color: #5a5040;
