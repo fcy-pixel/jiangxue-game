@@ -864,6 +864,14 @@ body {
   padding-bottom: 0.5rem;
   border-bottom: 1px solid rgba(200,150,12,0.2);
 }
+.bg-history-img {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  display: block;
+  border: 1px solid rgba(200,150,12,0.2);
+}
+
 .bg-section-body {
   display: flex;
   flex-direction: column;
