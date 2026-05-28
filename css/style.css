@@ -553,11 +553,13 @@ body {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.75);
-  display: flex !important;
   align-items: center;
   justify-content: center;
   z-index: 999;
   backdrop-filter: blur(4px);
+}
+#loading-overlay.active {
+  display: flex;
 }
 
 .loading-ink {

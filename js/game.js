@@ -301,7 +301,14 @@ const GameEngine = (() => {
 
   /* ---------- 載入動畫 ---------- */
   function showLoading(show) {
-    $('loading-overlay').style.display = show ? 'flex' : 'none';
+    const el = $('loading-overlay');
+    if (show) {
+      el.style.display = 'flex';
+      el.classList.add('active');
+    } else {
+      el.style.display = 'none';
+      el.classList.remove('active');
+    }
   }
 
   /* ---------- Toast 提示 ---------- */
