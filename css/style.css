@@ -311,7 +311,13 @@ body {
   padding: 1rem 1rem 0.5rem;
   flex: 0 0 auto;
 }
-.scene-icon { font-size: 3rem; filter: drop-shadow(0 0 12px rgba(200,150,12,0.4)); }
+.scene-icon {
+  font-size: 3rem;
+  font-family: 'Ma Shan Zheng', serif;
+  color: var(--gold);
+  line-height: 1;
+  filter: drop-shadow(0 0 12px rgba(200,150,12,0.4));
+}
 .scene-title {
   font-family: 'Ma Shan Zheng', serif;
   font-size: clamp(1rem, 3vw, 1.4rem);
@@ -347,9 +353,24 @@ body {
   align-items: center;
   justify-content: center;
   background: rgba(26,16,8,0.7);
-  font-size: clamp(2rem, 5vw, 2.8rem);
   position: relative;
+  overflow: hidden;
   box-shadow: inset 0 0 10px rgba(200,150,12,0.1), 0 0 15px rgba(200,150,12,0.15);
+}
+.portrait-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 2px;
+  filter: sepia(20%) contrast(1.1);
+}
+.portrait-char {
+  font-family: 'Ma Shan Zheng', serif;
+  font-size: clamp(2rem, 5vw, 2.6rem);
+  color: var(--gold);
+  opacity: 0.9;
+  line-height: 1;
+  user-select: none;
 }
 .portrait-frame::before, .portrait-frame::after {
   content: '';
@@ -716,6 +737,35 @@ body {
 .suggestion-chip:hover {
   background: rgba(200,150,12,0.22);
   border-color: var(--gold);
+}
+
+/* 音樂控制按鈕 */
+.music-toggle {
+  position: fixed;
+  bottom: 1.2rem;
+  right: 1.2rem;
+  width: 40px;
+  height: 40px;
+  background: rgba(26,16,8,0.85);
+  border: 1px solid rgba(200,150,12,0.45);
+  border-radius: 50%;
+  color: rgba(200,150,12,0.7);
+  font-size: 1.3rem;
+  cursor: pointer;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.25s, color 0.25s, box-shadow 0.25s;
+  line-height: 1;
+  padding: 0;
+  font-family: serif;
+}
+.music-toggle:hover,
+.music-toggle.playing {
+  border-color: var(--gold);
+  color: var(--gold);
+  box-shadow: 0 0 10px rgba(200,150,12,0.3);
 }
 
 /* ============================================================

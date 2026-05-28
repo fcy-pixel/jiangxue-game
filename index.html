@@ -54,7 +54,7 @@
 
     <!-- 場景圖示 -->
     <div class="scene-area" id="scene-area">
-      <div class="scene-icon" id="scene-icon">🏔️</div>
+      <div class="scene-icon" id="scene-icon">山</div>
       <div class="scene-title" id="scene-title">寒江垂釣</div>
     </div>
 
@@ -62,7 +62,8 @@
     <div class="dialogue-area">
       <div class="character-portrait" id="char-portrait">
         <div class="portrait-frame" id="portrait-frame">
-          <span class="portrait-icon" id="portrait-icon">👤</span>
+          <img class="portrait-img" id="portrait-img" src="" alt="" style="display:none">
+          <span class="portrait-char" id="portrait-char"></span>
         </div>
         <div class="portrait-name" id="portrait-name">柳宗元</div>
       </div>
@@ -94,7 +95,7 @@
         ></textarea>
         <button class="btn-send" id="btn-send" onclick="GameEngine.sendChat()">發送</button>
       </div>
-      <div class="chat-hint">💬 可自由與角色對話，完成後按「繼續故事」</div>
+      <div class="chat-hint">可自由與角色對話，完成後按「繼續故事」</div>
     </div>
 
     <!-- 繼續按鈕 -->
@@ -102,7 +103,7 @@
 
     <!-- Qwen AI 回應模式提示 -->
     <div class="ai-badge" id="ai-badge" style="display:none">
-      <span>🤖 AI 角色對話中…</span>
+      <span>AI 角色對話中…</span>
     </div>
   </div>
 
@@ -129,6 +130,10 @@
 
   <script src="js/characters.js"></script>
   <script src="js/story.js"></script>
+  <script src="js/music.js"></script>
   <script src="js/game.js"></script>
+
+  <!-- 音樂控制 -->
+  <button class="music-toggle" id="music-toggle" onclick="AmbientMusic.toggle(this)" title="古典音樂">&#9834;</button>
 </body>
 </html>

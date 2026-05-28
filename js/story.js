@@ -27,7 +27,7 @@ const STORY = {
   start: {
     id: 'start',
     chapter: '序章·寒江',
-    scene: { icon: '❄️', title: '永州·寒江之畔' },
+    scene: { icon: '雪', title: '永州·寒江之畔' },
     speaker: 'liuzongyuan',
     text: '千山都沒有鳥的蹤跡，萬條小路也沒有人的足跡。\n我柳宗元，獨自坐在這艘小船上，在白雪覆蓋的江面垂釣……\n已經是被貶謫的第五年了，京城，是否還記得我？',
     choices: [],
@@ -40,7 +40,7 @@ const STORY = {
   ch1_messenger_arrive: {
     id: 'ch1_messenger_arrive',
     chapter: '第一章·舊夢',
-    scene: { icon: '📯', title: '信使抵達' },
+    scene: { icon: '令', title: '信使抵達' },
     speaker: 'wangshuwwen',
     text: '子厚！我雖然已經不在人世，但昔日的同伴仍然記掛著你。\n革新雖然失敗了，但改革的志向不能熄滅——\n有人帶著我的遺書前來，希望你能繼承我未完成的志向。',
     useAI: true,
@@ -70,7 +70,7 @@ const STORY = {
   ch1_accept_legacy: {
     id: 'ch1_accept_legacy',
     chapter: '第一章·舊夢',
-    scene: { icon: '🔥', title: '燃起鬥志' },
+    scene: { icon: '炎', title: '燃起鬥志' },
     speaker: 'liuzongyuan',
     text: '叔文的靈魂，我聽見了。\n即使身在永州，我的筆，仍然可以指向時代的弊病。\n《封建論》《捕蛇者說》——都是我的武器。',
     choices: [],
@@ -80,7 +80,7 @@ const STORY = {
   ch1_decline_legacy: {
     id: 'ch1_decline_legacy',
     chapter: '第一章·舊夢',
-    scene: { icon: '📖', title: '選擇筆墨' },
+    scene: { icon: '書', title: '選擇筆墨' },
     speaker: 'liuzongyuan',
     text: '政治的道路已經斷絕，但文字卻永遠不會磨滅。\n我要用筆記錄永州的山水，保留百姓的疾苦，\n也許，這才是我真正的使命。',
     choices: [],
@@ -90,7 +90,7 @@ const STORY = {
   ch1_despair: {
     id: 'ch1_despair',
     chapter: '第一章·舊夢',
-    scene: { icon: '🌧️', title: '心灰意冷' },
+    scene: { icon: '雨', title: '心灰意冷' },
     speaker: 'liuzongyuan',
     text: '……我連那個漁翁都不如。\n他至少還有自由，而我，不過是朝廷拋棄的人。\n這漫天的江雪，恐怕要埋葬我的一生了。',
     choices: [],
@@ -103,7 +103,7 @@ const STORY = {
   ch2_liuyuxi_letter: {
     id: 'ch2_liuyuxi_letter',
     chapter: '第二章·友情',
-    scene: { icon: '✉️', title: '夢得來信' },
+    scene: { icon: '信', title: '夢得來信' },
     speaker: 'liuyuxi',
     text: '子厚！我劉夢得也在朗州受苦，但看看這裡的巴山楚水，竟也別有詩意！\n聽聞你在永州著書立說，痛快！\n咱們兩個，被貶也要把詩寫得比那些達官貴人強十倍！',
     useAI: true,
@@ -127,7 +127,7 @@ const STORY = {
   ch2_fisherman_early: {
     id: 'ch2_fisherman_early',
     chapter: '第二章·問道',
-    scene: { icon: '🎣', title: '江上遇漁翁' },
+    scene: { icon: '釣', title: '江上遇漁翁' },
     speaker: 'fisherman',
     text: '年輕人，你盯著這片江雪看了很長時間了。\n你知道嗎，這雪落入江中，就不再是雪了，\n而你落入官場，你還是你自己嗎？',
     useAI: true,
@@ -151,7 +151,7 @@ const STORY = {
   ch2_writing_spirit: {
     id: 'ch2_writing_spirit',
     chapter: '第二章·筆耕',
-    scene: { icon: '✍️', title: '揮毫永州' },
+    scene: { icon: '墨', title: '揮毫永州' },
     speaker: 'liuzongyuan',
     text: '（柳宗元提起筆，望向窗外的小石潭……）\n山水有情，我也有情。\n《永州八記》，就從今天開始！',
     choices: [],
@@ -161,7 +161,7 @@ const STORY = {
   ch2_seek_return: {
     id: 'ch2_seek_return',
     chapter: '第二章·謀算',
-    scene: { icon: '🗺️', title: '謀求回京' },
+    scene: { icon: '圖', title: '謀求回京' },
     speaker: 'liuyuxi',
     text: '回京？子厚，我們的名字至今仍讓那些守舊派感到不安。\n如果要回京，必須先讓皇上看見我們的才學，\n而不是政治主張……',
     useAI: true,
@@ -173,7 +173,7 @@ const STORY = {
   ch2_enlightened: {
     id: 'ch2_enlightened',
     chapter: '第二章·悟道',
-    scene: { icon: '🌿', title: '心境開朗' },
+    scene: { icon: '葉', title: '心境開朗' },
     speaker: 'fisherman',
     text: '哈哈，年輕人終於想通了。\n這江裡的魚，從來不問自己是否在最深的深淵。\n只管游下去，就好了。',
     choices: [],
@@ -186,7 +186,7 @@ const STORY = {
   ch3_hanyu_visit: {
     id: 'ch3_hanyu_visit',
     chapter: '第三章·文壇',
-    scene: { icon: '🏛️', title: '韓退之來訪' },
+    scene: { icon: '廟', title: '韓退之來訪' },
     speaker: 'hanyu',
     text: '子厚，你的《捕蛇者說》我已拜讀過了。\n文章確實很好，但這些言論傳到京城，恐怕……\n我並非要你沉默，只是——有些話，用文章說，比用奏折說，更加危險。',
     useAI: true,
@@ -216,7 +216,7 @@ const STORY = {
   ch3_prudent_path: {
     id: 'ch3_prudent_path',
     chapter: '第三章·隱鋒',
-    scene: { icon: '🌊', title: '收斂鋒芒' },
+    scene: { icon: '波', title: '收斂鋒芒' },
     speaker: 'hanyu',
     text: '這樣很好。你的才華可以在永州的山水中盡情揮灑，\n等到時機成熟，自然會有皇上召你回去的那一天。\n我在京城，一定會為你留意機會的。',
     choices: [],
@@ -226,7 +226,7 @@ const STORY = {
   ch3_brave_path: {
     id: 'ch3_brave_path',
     chapter: '第三章·直筆',
-    scene: { icon: '⚔️', title: '直筆不諱' },
+    scene: { icon: '劍', title: '直筆不諱' },
     speaker: 'liuzongyuan',
     text: '我的文章，是百姓的聲音。\n如果連這個也要隱藏，那永州的十年，不是白白浪費了嗎？\n我寧可再被貶謫，也不願意低頭屈服。',
     choices: [],
@@ -236,7 +236,7 @@ const STORY = {
   ch3_ask_hanyu_help: {
     id: 'ch3_ask_hanyu_help',
     chapter: '第三章·求援',
-    scene: { icon: '🤝', title: '求韓愈代言' },
+    scene: { icon: '義', title: '求韓愈代言' },
     speaker: 'hanyu',
     text: '子厚……我與你是文壇好友，這份情誼我非常珍視。\n但在皇上面前，我也需要謹慎行事——\n不過我可以在文壇廣泛傳播你的佳作，讓皇上自然聽聞你的才名。',
     useAI: true,
@@ -251,7 +251,7 @@ const STORY = {
   ch4_emperor_summon: {
     id: 'ch4_emperor_summon',
     chapter: '第四章·天意',
-    scene: { icon: '👑', title: '皇詔抵達' },
+    scene: { icon: '冠', title: '皇詔抵達' },
     speaker: 'emperor',
     text: '朕聽聞柳宗元才名，他的《永州八記》已傳至京城。\n朕念在他受苦十年，本有意……\n但永貞舊事，朕怎能忘記？\n柳宗元，你有什麼話可說？',
     useAI: true,
@@ -281,7 +281,7 @@ const STORY = {
   ch4_submit: {
     id: 'ch4_submit',
     chapter: '第四章·折腰',
-    scene: { icon: '📜', title: '俯首稱臣' },
+    scene: { icon: '詔', title: '俯首稱臣' },
     speaker: 'emperor',
     text: '柳宗元能知錯改過，這是非常好的事情。\n但京中舊事未息，朕命你擔任柳州刺史，\n好好治理百姓，不要再生事端。',
     choices: [],
@@ -291,7 +291,7 @@ const STORY = {
   ch4_defend: {
     id: 'ch4_defend',
     chapter: '第四章·直諫',
-    scene: { icon: '⚡', title: '直言陳情' },
+    scene: { icon: '鳴', title: '直言陳情' },
     speaker: 'emperor',
     text: '（皇上微微動怒）\n柳宗元，你這是……\n算了。你的文章朕都讀過，確實是個人才。\n但這件事，讓朕再考慮考慮。',
     choices: [],
@@ -301,7 +301,7 @@ const STORY = {
   ch4_offer_service: {
     id: 'ch4_offer_service',
     chapter: '第四章·柳州',
-    scene: { icon: '🌿', title: '請命柳州' },
+    scene: { icon: '葉', title: '請命柳州' },
     speaker: 'emperor',
     text: '柳州……確實偏遠。\n你既然有這份心意，就去吧。\n朕要看看你在柳州能有什麼作為。',
     choices: [],
@@ -314,7 +314,7 @@ const STORY = {
   ending_check: {
     id: 'ending_check',
     chapter: '尾聲',
-    scene: { icon: '🌌', title: '命運揭曉' },
+    scene: { icon: '星', title: '命運揭曉' },
     speaker: 'liuzongyuan',
     text: '（柳宗元靜靜望向那片江雪，心中已有了答案……）',
     choices: [],
@@ -369,7 +369,7 @@ const ENDINGS = {
     poem: '千山萬徑本無人，\n蓑笠漁翁自在身。\n名利浮雲皆散去，\n一竿釣盡古今春。',
     desc: '柳宗元受漁翁點化，看透了仕途的虛妄，\n選擇在永州山水間終老，著書立說，廣收弟子。\n他成為了那個時代最自由的靈魂，如《江雪》詩中的漁翁一般，超然物外。',
     tags: ['隱逸路線', '道家超脫', '假設歷史'],
-    history: '🌿 這是假設的歷史分支。現實中柳宗元並未真正歸隱，但詩中漁翁的意象被認為是他內心的投射。',
+    history: '葉 這是假設的歷史分支。現實中柳宗元並未真正歸隱，但詩中漁翁的意象被認為是他內心的投射。',
     minFate: 55,
     requiredFlags: ['dao_wisdom'],
   },

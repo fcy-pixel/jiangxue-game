@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="500" viewBox="0 0 400 500">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="65%">
+      <stop offset="0%" stop-color="#1a1408"/>
+      <stop offset="100%" stop-color="#08060a"/>
+    </radialGradient>
+    <filter id="blur"><feGaussianBlur stdDeviation="6"/></filter>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="gb"/>
+      <feMerge><feMergeNode in="gb"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- 墨色背景 -->
+  <rect width="400" height="500" fill="url(#bg)"/>
+
+  <!-- 水墨筆觸 -->
+  <path d="M 100 200 Q 140 150 200 140 Q 260 130 300 160 Q 280 220 240 280 Q 210 330 200 400" stroke="#6aabbc" stroke-width="18" fill="none" stroke-linecap="round" stroke-opacity="0.25" filter="url(#blur)"/>
+  <path d="M 100 200 Q 80 250 90 320 Q 100 370 120 410" stroke="#6aabbc" stroke-width="18" fill="none" stroke-linecap="round" stroke-opacity="0.25" filter="url(#blur)"/>
+  <path d="M 140 180 C 170 160 220 155 250 175" stroke="#6aabbc" stroke-width="18" fill="none" stroke-linecap="round" stroke-opacity="0.25" filter="url(#blur)"/>
+
+  <!-- 大字水印 -->
+  <text x="200" y="320" text-anchor="middle" font-family="serif" font-size="240"
+    fill="#4a7a8a" opacity="0.07">翁</text>
+
+  <!-- 人物輪廓暗示 -->
+  <ellipse cx="200" cy="200" rx="55" ry="75" fill="#4a7a8a" opacity="0.06"/>
+  <ellipse cx="200" cy="360" rx="70" ry="100" fill="#4a7a8a" opacity="0.05"/>
+
+  <!-- 角落印章框 -->
+  <rect x="18" y="18" width="52" height="52" fill="none" stroke="#4a7a8a" stroke-width="1.5" opacity="0.7"/>
+  <text x="44" y="55" text-anchor="middle" font-family="serif" font-size="32"
+    fill="#4a7a8a" opacity="0.85" filter="url(#glow)">翁</text>
+
+  <!-- 身份題款 -->
+  <text x="355" y="80" text-anchor="end" font-family="serif" font-size="11"
+    fill="#4a7a8a" opacity="0.55" writing-mode="tb" glyph-orientation-vertical="0"
+    letter-spacing="3">寒江隱者</text>
+
+  <!-- 底部名號 -->
+  <line x1="80" y1="462" x2="320" y2="462" stroke="#4a7a8a" stroke-width="0.8" opacity="0.4"/>
+  <text x="200" y="484" text-anchor="middle" font-family="serif" font-size="15"
+    fill="#4a7a8a" opacity="0.75" letter-spacing="6">江上漁翁</text>
+</svg>

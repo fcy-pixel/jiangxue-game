@@ -44,13 +44,19 @@ const GameEngine = (() => {
     renderNode('start');
   }
 
-  /* ---------- 建立 system prompt（加書面語要求）---------- */
+  /* ---------- 建立 system prompt（語言規則置頂）---------- */
   function buildSystemPrompt(char) {
-    return char.systemPrompt +
-      '\n\n【重要語言要求】必須使用現代書面語作答，絕對不可使用文言文。' +
-      '禁止使用「吾」「汝」「乃」「豈」「焉」「固」「然」（作轉折語）等文言字詞，' +
-      '一律改用「我」「你」「是」「但是」「確實」等現代書面語。' +
-      '保持文雅風格，每次回應不超過100字，語氣符合角色性格。';
+    const LANG_RULE =
+      '【強制語言規則 — 最高優先，不可違反】\n' +
+      '你必須全程使用現代書面中文（白話文）對話，絕對禁止使用文言文。\n' +
+      '• 必須說「我」，嚴禁說「吾」\n' +
+      '• 必須說「你」，嚴禁說「汝」「爾」\n' +
+      '• 嚴禁使用「乃」「亦」「豈」「焉」「哉」「矣」「蓋」作語氣或連接詞\n' +
+      '• 嚴禁以「……也。」「……矣。」「……乎？」等文言句式結尾\n' +
+      '• 說話像現代人寫正式書信：文雅、清晰、學生容易理解\n' +
+      '• 每次回應不超過80字\n\n' +
+      '【角色背景】\n';
+    return LANG_RULE + char.systemPrompt;
   }
 
   /* ---------- 渲染節點 ---------- */
@@ -74,7 +80,18 @@ const GameEngine = (() => {
 
     // 更新角色肖像
     if (state.currentChar) {
-      $('portrait-icon').textContent = state.currentChar.icon;
+      const imgEl = $('portrait-img');
+      const charEl = $('portrait-char');
+      if (state.currentChar.portrait) {
+        imgEl.src = state.currentChar.portrait;
+        imgEl.alt = state.currentChar.name;
+        imgEl.style.display = 'block';
+        charEl.style.display = 'none';
+      } else {
+        imgEl.style.display = 'none';
+        charEl.style.display = 'block';
+        charEl.textContent = state.currentChar.char || state.currentChar.name[0];
+      }
       $('portrait-name').textContent = state.currentChar.name;
       $('portrait-frame').style.borderColor = state.currentChar.color;
     }

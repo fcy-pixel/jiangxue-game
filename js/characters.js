@@ -7,7 +7,8 @@ const CHARACTERS = {
   liuzongyuan: {
     id: 'liuzongyuan',
     name: '柳宗元',
-    icon: '🧑‍🦱',
+    char: '柳',
+    portrait: 'images/portraits/liuzongyuan.svg',
     color: '#c8960c',
     systemPrompt: `你是柳宗元（773年—819年），字子厚，唐代著名文學家、政治家，唐宋八大家之一。
 你才華橫溢，懷抱改革理想，曾參與永貞革新，後遭貶謫永州十年，現又被貶柳州。
@@ -27,7 +28,8 @@ const CHARACTERS = {
   wangshuwwen: {
     id: 'wangshuwwen',
     name: '王叔文',
-    icon: '👨‍💼',
+    char: '王',
+    portrait: 'images/portraits/wangshuwwen.svg',
     color: '#8b1a1a',
     systemPrompt: `你是王叔文（753年—806年），唐代政治改革家，永貞革新的核心人物。
 你善棋，曾為太子侍讀，深受信任，主導了以打擊宦官和藩鎮為核心的改革。
@@ -46,7 +48,8 @@ const CHARACTERS = {
   liuyuxi: {
     id: 'liuyuxi',
     name: '劉禹錫',
-    icon: '📜',
+    char: '劉',
+    portrait: 'images/portraits/liuyuxi.svg',
     color: '#1a5c3a',
     systemPrompt: `你是劉禹錫（772年—842年），字夢得，唐代著名詩人，與柳宗元並稱"劉柳"。
 你們同年被貶，是最親密的患難之交。你詩風豪邁，以"詩豪"著稱。
@@ -65,7 +68,8 @@ const CHARACTERS = {
   hanyu: {
     id: 'hanyu',
     name: '韓愈',
-    icon: '🖌️',
+    char: '韓',
+    portrait: 'images/portraits/hanyu.svg',
     color: '#3a3a6a',
     systemPrompt: `你是韓愈（768年—824年），字退之，唐代文學家、政治家，古文運動領袖，唐宋八大家之首。
 你與柳宗元在文學上互相欣賞，政治立場則有所不同。你崇儒反佛，忠君保守。
@@ -84,7 +88,8 @@ const CHARACTERS = {
   fisherman: {
     id: 'fisherman',
     name: '江上漁翁',
-    icon: '🎣',
+    char: '翁',
+    portrait: 'images/portraits/fisherman.svg',
     color: '#4a7a8a',
     systemPrompt: `你是一位神秘的江上漁翁，象徵著道家的超脫智慧，類似《江雪》詩中那位獨釣寒江雪的隱者。
 你不屬於任何歷史朝代，你代表的是老莊的哲學智慧。
@@ -103,7 +108,8 @@ const CHARACTERS = {
   emperor: {
     id: 'emperor',
     name: '唐憲宗',
-    icon: '👑',
+    char: '宗',
+    portrait: 'images/portraits/emperor.svg',
     color: '#8b6914',
     systemPrompt: `你是唐憲宗李純（778年—820年），唐朝第十一位皇帝，元和中興的締造者。
 你雄才大略，致力削藩，但也多疑，對永貞革新的參與者一直抱有戒心。
