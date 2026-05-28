@@ -792,16 +792,16 @@ body {
    歷史背景 & 玩法介紹畫面
    ============================================================ */
 #screen-background {
-  overflow-y: auto;
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-  /* 覆蓋 .screen 的 justify-content:center，避免手機捲動失效 */
+  overflow: hidden;
   justify-content: flex-start;
   align-items: stretch;
 }
 
 .bg-scroll-wrap {
-  min-height: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
   display: flex;
   justify-content: center;
   padding: 2rem 1rem 3rem;
