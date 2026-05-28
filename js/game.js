@@ -45,16 +45,27 @@ const GameEngine = (() => {
   }
 
   /* ---------- 建立 system prompt（語言規則置頂）---------- */
+  /* 語言提醒短句，附加到每條 user message 末尾 */
+  const LANG_REMINDER = '\n\n（請用現代書面中文回答，不可用文言文，不可說「吾」「汝」「乃」「矣」等文言詞。）';
+
   function buildSystemPrompt(char) {
     const LANG_RULE =
-      '【強制語言規則 — 最高優先，不可違反】\n' +
-      '你必須全程使用現代書面中文（白話文）對話，絕對禁止使用文言文。\n' +
-      '• 必須說「我」，嚴禁說「吾」\n' +
-      '• 必須說「你」，嚴禁說「汝」「爾」\n' +
-      '• 嚴禁使用「乃」「亦」「豈」「焉」「哉」「矣」「蓋」作語氣或連接詞\n' +
-      '• 嚴禁以「……也。」「……矣。」「……乎？」等文言句式結尾\n' +
-      '• 說話像現代人寫正式書信：文雅、清晰、學生容易理解\n' +
-      '• 每次回應不超過80字\n\n' +
+      '【語言規定 — 這是最重要的規定，必須百分之百遵守】\n' +
+      '本遊戲供中學生使用。雖然你扮演古代歷史人物，但你必須全程使用【現代書面中文（白話文）】交談，絕對禁止使用文言文。\n\n' +
+      '禁止使用的文言詞（括號內是必須改用的現代詞）：\n' +
+      '• 吾、余 → 改說「我」\n' +
+      '• 汝、爾、卿 → 改說「你」\n' +
+      '• 乃 → 改說「是」或「就是」\n' +
+      '• 亦 → 改說「也」\n' +
+      '• 豈 → 改說「難道」\n' +
+      '• 焉、哉、矣、也（語氣詞）→ 刪去或換現代語氣詞\n' +
+      '• 與爾 → 改說「跟你」或「和你」\n\n' +
+      '正確與錯誤示範：\n' +
+      '❌ 錯誤：「吾乃柳宗元，願與爾共議天下大計。」\n' +
+      '✅ 正確：「我是柳宗元，很高興跟你討論這些問題。」\n' +
+      '❌ 錯誤：「此事豈能輕言放棄？吾心甚痛矣。」\n' +
+      '✅ 正確：「這件事怎麼能輕易放棄呢？我心裡非常難受。」\n\n' +
+      '說話風格：像受過良好教育的現代人，用正式清晰的書面中文，學生一看就能明白。每次回應不超過80字。\n\n' +
       '【角色背景】\n';
     return LANG_RULE + char.systemPrompt;
   }
@@ -195,7 +206,7 @@ const GameEngine = (() => {
 
     // 顯示玩家氣泡
     appendBubble('player', null, userText);
-    state.nodeMessages.push({ role: 'user', content: userText });
+    state.nodeMessages.push({ role: 'user', content: userText + LANG_REMINDER });
 
     // 顯示「正在回應」loading 氣泡
     const loadingBubble = appendLoadingBubble();
@@ -254,7 +265,7 @@ const GameEngine = (() => {
     try {
       const messages = [
         { role: 'system', content: buildSystemPrompt(char) },
-        { role: 'user', content: node.aiPrompt || node.text },
+        { role: 'user', content: (node.aiPrompt || node.text) + LANG_REMINDER },
       ];
       const resp = await fetch('/api/chat', {
         method: 'POST',
