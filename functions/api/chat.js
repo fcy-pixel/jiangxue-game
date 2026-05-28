@@ -44,7 +44,7 @@ export async function onRequestPost(context) {
     let qwenResp;
     try {
       qwenResp = await fetch(
-        'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions',
+        'https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions',
         {
           method: 'POST',
           signal: ctrl.signal,
