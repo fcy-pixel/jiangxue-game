@@ -885,6 +885,18 @@ body {
 /* 人物資料卡 */
 .bg-person-card {
   margin-bottom: 1rem;
+  display: flex;
+  gap: 1.2rem;
+  align-items: flex-start;
+}
+.bg-person-portrait {
+  flex-shrink: 0;
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid rgba(200,150,12,0.45);
+  box-shadow: 0 0 16px rgba(200,150,12,0.2);
 }
 .bg-person-info {
   display: flex;
