@@ -585,6 +585,115 @@ body {
 }
 
 /* ============================================================
+   自由對話輸入區
+   ============================================================ */
+.chat-area {
+  width: 100%;
+  max-width: 800px;
+  padding: 0 1.2rem 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* 對話紀錄 */
+.chat-history {
+  max-height: 160px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding-right: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: #4a3820 transparent;
+}
+.chat-history::-webkit-scrollbar { width: 4px; }
+.chat-history::-webkit-scrollbar-thumb { background: #4a3820; border-radius: 2px; }
+
+/* 對話氣泡 */
+.chat-bubble {
+  max-width: 85%;
+  padding: 0.5em 0.9em;
+  border-radius: 3px;
+  font-size: clamp(0.8rem, 1.9vw, 0.92rem);
+  line-height: 1.75;
+  animation: fadeIn 0.3s ease;
+}
+.chat-bubble.player {
+  align-self: flex-end;
+  background: rgba(200,150,12,0.12);
+  border: 1px solid rgba(200,150,12,0.35);
+  color: var(--rice);
+}
+.chat-bubble.player::before {
+  content: '你：';
+  color: var(--gold);
+  font-size: 0.78em;
+  display: block;
+  margin-bottom: 0.2em;
+}
+.chat-bubble.character {
+  align-self: flex-start;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid #3a2810;
+  color: var(--rice);
+}
+.chat-bubble.character .bubble-name {
+  color: var(--gold);
+  font-size: 0.78em;
+  display: block;
+  margin-bottom: 0.2em;
+}
+
+/* 輸入行 */
+.chat-input-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-end;
+}
+.chat-textarea {
+  flex: 1;
+  font-family: 'Noto Serif SC', serif;
+  font-size: clamp(0.82rem, 1.9vw, 0.95rem);
+  background: rgba(255,255,255,0.06);
+  border: 1px solid #4a3820;
+  color: var(--rice);
+  padding: 0.55em 0.85em;
+  resize: none;
+  outline: none;
+  border-radius: 3px;
+  line-height: 1.6;
+  transition: border-color 0.2s;
+}
+.chat-textarea:focus { border-color: var(--gold); }
+.chat-textarea::placeholder { color: #5a5040; }
+
+.btn-send {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 0.88rem;
+  letter-spacing: 0.1em;
+  color: var(--ink);
+  background: var(--gold);
+  border: none;
+  padding: 0.55em 1.1em;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background 0.2s, transform 0.1s;
+  white-space: nowrap;
+  align-self: stretch;
+}
+.btn-send:hover { background: var(--gold-light); }
+.btn-send:active { transform: scale(0.97); }
+.btn-send:disabled { background: #4a3820; color: #6b6b5a; cursor: not-allowed; }
+
+.chat-hint {
+  font-size: 0.72rem;
+  color: #5a5040;
+  letter-spacing: 0.05em;
+  text-align: right;
+}
+
+/* ============================================================
    捲軸裝飾線（橫向分隔）
    ============================================================ */
 .divider {

@@ -82,6 +82,24 @@
     <!-- 選項按鈕 -->
     <div class="choices-area" id="choices-area"></div>
 
+    <!-- 自由對話輸入區（AI節點專用） -->
+    <div class="chat-area" id="chat-area" style="display:none">
+      <!-- 對話紀錄 -->
+      <div class="chat-history" id="chat-history"></div>
+      <!-- 輸入行 -->
+      <div class="chat-input-row">
+        <textarea
+          id="chat-input"
+          class="chat-textarea"
+          placeholder="請輸入你想對他說的話……"
+          rows="2"
+          maxlength="200"
+        ></textarea>
+        <button class="btn-send" id="btn-send" onclick="GameEngine.sendChat()">發送</button>
+      </div>
+      <div class="chat-hint">💬 可自由與角色對話，完成後按「繼續故事」</div>
+    </div>
+
     <!-- 繼續按鈕 -->
     <button class="btn-ancient btn-continue" id="btn-continue" onclick="GameEngine.nextNode()" style="display:none">繼續 ›</button>
 

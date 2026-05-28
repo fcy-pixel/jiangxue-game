@@ -1,6 +1,6 @@
 /**
  * game.js
- * 江雪·問天 — 主遊戲引擎
+ * 江雪·問天 — 主遊戲引擎（含自由對話功能）
  */
 
 const GameEngine = (() => {
@@ -11,37 +11,14 @@ const GameEngine = (() => {
     currentNodeId: 'start',
     apiKey: '',
     isTyping: false,
-    history: [], // { speaker, text }
+    history: [],        // 全局對話歷史 { speaker, text }
+    nodeMessages: [],   // 當前節點的多輪對話 [{ role, content }]
+    currentChar: null,  // 當前節點的角色資料
+    isSending: false,   // 防止重複送出
   };
 
   /* ---------- DOM 快取 ---------- */
   const $ = id => document.getElementById(id);
-
-  /* ---------- 初始化雪花 ---------- */
-  function initSnow() {
-    const container = $('snow-container');
-    const chars = ['❄', '❅', '❆', '·', '∘'];
-    for (let i = 0; i < 40; i++) {
-      const el = document.createElement('span');
-      el.className = 'snowflake';
-      el.textContent = chars[Math.floor(Math.random() * chars.length)];
-      el.style.left = Math.random() * 100 + 'vw';
-      el.style.fontSize = (0.6 + Math.random() * 0.8) + 'em';
-      const dur = 8 + Math.random() * 14;
-      const delay = Math.random() * 15;
-      el.style.animation = `snowfall ${dur}s ${delay}s linear infinite`;
-      container.appendChild(el);
-    }
-  }
-
-  /* ---------- 詩句動畫 ---------- */
-  function animatePoem() {
-    const lines = document.querySelectorAll('.poem-line, .poem-author');
-    lines.forEach(el => {
-      const delay = parseInt(el.dataset.delay || 0);
-      el.style.animationDelay = delay + 'ms';
-    });
-  }
 
   /* ---------- 儲存 API Key ---------- */
   function saveApiKey() {
@@ -77,9 +54,19 @@ const GameEngine = (() => {
     state.flags = new Set();
     state.currentNodeId = 'start';
     state.history = [];
+    state.nodeMessages = [];
+    state.currentChar = null;
 
     showScreen('screen-game');
     renderNode('start');
+  }
+
+  /* ---------- 建立 system prompt（加書面語要求）---------- */
+  function buildSystemPrompt(char) {
+    return char.systemPrompt +
+      '\n\n【語言要求】請用學生容易理解的書面語回答，' +
+      '保持古典文雅風格，但避免過於艱深的文言文。' +
+      '每次回應不超過100字，語氣要符合角色性格。';
   }
 
   /* ---------- 渲染節點 ---------- */
@@ -87,8 +74,11 @@ const GameEngine = (() => {
     const node = STORY[nodeId];
     if (!node) { console.error('找不到節點：', nodeId); return; }
     state.currentNodeId = nodeId;
+    state.nodeMessages = [];
+    state.currentChar = CHARACTERS[node.speaker] || null;
+    hideChatArea();
 
-    // 更新章節欄
+    // 更新頂欄
     $('chapter-title').textContent = node.chapter || '';
     updateFateBar();
 
@@ -99,11 +89,10 @@ const GameEngine = (() => {
     }
 
     // 更新角色肖像
-    const char = CHARACTERS[node.speaker];
-    if (char) {
-      $('portrait-icon').textContent = char.icon;
-      $('portrait-name').textContent = char.name;
-      $('portrait-frame').style.borderColor = char.color;
+    if (state.currentChar) {
+      $('portrait-icon').textContent = state.currentChar.icon;
+      $('portrait-name').textContent = state.currentChar.name;
+      $('portrait-frame').style.borderColor = state.currentChar.color;
     }
 
     // 清空選項與按鈕
@@ -111,31 +100,154 @@ const GameEngine = (() => {
     $('btn-continue').style.display = 'none';
     $('ai-badge').style.display = 'none';
 
-    // 取得對話文字
+    // 取得初始對話文字
     let text = node.text;
-
-    if (node.useAI && state.apiKey) {
+    if (node.useAI) {
       $('ai-badge').style.display = 'block';
-      text = await fetchAIDialogue(node);
+      text = await fetchInitialDialogue(node);
+      $('ai-badge').style.display = 'none';
     }
 
-    // 打字機效果顯示文字
+    // 建立節點 messages 基礎（給後續自由對話用）
+    if (state.currentChar) {
+      state.nodeMessages = [
+        { role: 'system', content: buildSystemPrompt(state.currentChar) },
+        { role: 'assistant', content: text },
+      ];
+    }
+
+    // 打字機顯示文字
     await typeText(text);
 
-    // 顯示選項或繼續按鈕
+    // 顯示下方控件
     if (node.choices && node.choices.length > 0) {
       renderChoices(node.choices);
+      if (node.useAI) showChatArea();
     } else if (node.next === '__ending__') {
+      if (node.useAI) showChatArea();
       $('btn-continue').textContent = '揭曉命運 ›';
       $('btn-continue').style.display = 'block';
       $('btn-continue').onclick = triggerEnding;
     } else if (node.next) {
+      if (node.useAI) showChatArea();
+      $('btn-continue').textContent = '繼續故事 ›';
       $('btn-continue').style.display = 'block';
       $('btn-continue').onclick = () => renderNode(node.next);
     } else if (node.ending) {
       $('btn-continue').textContent = '揭曉命運 ›';
       $('btn-continue').style.display = 'block';
       $('btn-continue').onclick = () => showEnding(ENDINGS[node.ending]);
+    }
+  }
+
+  /* ---------- 顯示 / 隱藏自由對話區 ---------- */
+  function showChatArea() {
+    const area = $('chat-area');
+    $('chat-history').innerHTML = '';
+    $('chat-input').value = '';
+    area.style.display = 'flex';
+    $('chat-input').onkeydown = (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendChat();
+      }
+    };
+  }
+
+  function hideChatArea() {
+    $('chat-area').style.display = 'none';
+    $('chat-history').innerHTML = '';
+    if ($('chat-input')) $('chat-input').value = '';
+  }
+
+  /* ---------- 自由對話：發送訊息 ---------- */
+  async function sendChat() {
+    if (state.isSending) return;
+    const input = $('chat-input');
+    const userText = input.value.trim();
+    if (!userText) return;
+
+    state.isSending = true;
+    const sendBtn = $('btn-send');
+    sendBtn.disabled = true;
+    input.value = '';
+
+    // 顯示玩家氣泡
+    appendBubble('player', null, userText);
+    state.nodeMessages.push({ role: 'user', content: userText });
+
+    // 顯示「正在回應」loading 氣泡
+    const loadingBubble = appendLoadingBubble();
+
+    // 呼叫 AI
+    const reply = await fetchChatReply();
+
+    // 移除 loading 氣泡，顯示回應
+    loadingBubble.remove();
+    appendBubble('character', state.currentChar?.name || '角色', reply);
+    state.nodeMessages.push({ role: 'assistant', content: reply });
+
+    // 同時更新主對話框（打字機）
+    await typeText(reply);
+
+    state.isSending = false;
+    sendBtn.disabled = false;
+    input.focus();
+  }
+
+  /* ---------- 追加氣泡到對話紀錄 ---------- */
+  function appendBubble(type, name, text) {
+    const history = $('chat-history');
+    const bubble = document.createElement('div');
+    bubble.className = `chat-bubble ${type}`;
+    if (type === 'character' && name) {
+      const nameEl = document.createElement('span');
+      nameEl.className = 'bubble-name';
+      nameEl.textContent = name + '：';
+      bubble.appendChild(nameEl);
+    }
+    bubble.appendChild(document.createTextNode(text));
+    history.appendChild(bubble);
+    history.scrollTop = history.scrollHeight;
+    return bubble;
+  }
+
+  function appendLoadingBubble() {
+    const history = $('chat-history');
+    const bubble = document.createElement('div');
+    bubble.className = 'chat-bubble character';
+    bubble.innerHTML = '<span class="bubble-name">' +
+      (state.currentChar?.name || '角色') + '：</span>' +
+      '<span style="color:#6b6b5a;font-style:italic">正在回應……</span>';
+    history.appendChild(bubble);
+    history.scrollTop = history.scrollHeight;
+    return bubble;
+  }
+
+  /* ---------- 自由對話 AI 請求 ---------- */
+  async function fetchChatReply() {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 8000);
+    try {
+      const resp = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal,
+        body: JSON.stringify({
+          apiKey: state.apiKey,
+          messages: state.nodeMessages,
+          characterId: state.currentChar?.id || '',
+        }),
+      });
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const data = await resp.json();
+      return data.choices?.[0]?.message?.content || '（角色沉默不語……）';
+    } catch (e) {
+      if (e.name === 'AbortError') return '（回應逾時，請再試一次。）';
+      console.error('Chat error:', e);
+      return '（暫時無法取得回應，請稍後再試。）';
+    } finally {
+      clearTimeout(timer);
     }
   }
 
@@ -239,76 +351,10 @@ const GameEngine = (() => {
   }
 
   /* ---------- Qwen AI 對話 ---------- */
-  async function fetchAIDialogue(node) {
-    showLoading(true);
-    const char = CHARACTERS[node.speaker];
-    if (!char) { showLoading(false); return node.text; }
-
-    // 構建歷史上下文
-    const messages = [
-      { role: 'system', content: char.systemPrompt },
-    ];
-
-    // 加入之前的對話歷史（最多5條）
-    const recentHistory = state.history.slice(-5);
-    recentHistory.forEach(h => {
-      messages.push({ role: 'assistant', content: h.text });
-    });
-
-    messages.push({
-      role: 'user',
-      content: `[場景：${node.scene?.title || ''}] [命運指數：${state.fate}] [旗標：${[...state.flags].join(',')}]\n${node.aiPrompt}`,
-    });
-
-    // 8 秒超時：避免 loading 一直卡住
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 8000);
-
-    try {
-      const resp = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        signal: controller.signal,
-        body: JSON.stringify({
-          apiKey: state.apiKey,
-          messages,
-          characterId: node.speaker,
-        }),
-      });
-
-      if (!resp.ok) {
-        const err = await resp.json().catch(() => ({}));
-        throw new Error(err.error || `HTTP ${resp.status}`);
-      }
-
-      const data = await resp.json();
-      const text = data.choices?.[0]?.message?.content || node.text;
-      state.history.push({ speaker: node.speaker, text });
-      return text;
-    } catch (e) {
-      if (e.name === 'AbortError') {
-        showToast('⏱ AI 回應逾時，顯示預設文字');
-      } else {
-        console.error('Qwen API 錯誤：', e);
-        showToast('AI 對話暫時無法使用，顯示預設文字');
-      }
-      return node.text;
-    } finally {
-      clearTimeout(timer);
-      showLoading(false);
-    }
-  }
-
   /* ---------- 載入動畫 ---------- */
   function showLoading(show) {
     const el = $('loading-overlay');
-    if (show) {
-      el.style.display = 'flex';
-      el.classList.add('active');
-    } else {
-      el.style.display = 'none';
-      el.classList.remove('active');
-    }
+    el.style.display = show ? 'flex' : 'none';
   }
 
   /* ---------- Toast 提示 ---------- */
@@ -333,7 +379,7 @@ const GameEngine = (() => {
   }
 
   /* ---------- 公開介面 ---------- */
-  return { startGame, saveApiKey, nextNode, restart };
+  return { startGame, saveApiKey, nextNode, restart, sendChat };
 })();
 
 /* ---------- 頁面載入初始化 ---------- */
