@@ -693,6 +693,31 @@ body {
   text-align: right;
 }
 
+/* 建議問題 chips */
+.chat-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0.1rem 0;
+}
+.suggestion-chip {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 0.74rem;
+  padding: 0.3em 0.85em;
+  background: rgba(200,150,12,0.08);
+  border: 1px solid rgba(200,150,12,0.4);
+  color: var(--gold);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+.suggestion-chip:hover {
+  background: rgba(200,150,12,0.22);
+  border-color: var(--gold);
+}
+
 /* ============================================================
    捲軸裝飾線（橫向分隔）
    ============================================================ */

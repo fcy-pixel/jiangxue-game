@@ -130,6 +130,24 @@ const GameEngine = (() => {
     $('chat-history').innerHTML = '';
     $('chat-input').value = '';
     area.style.display = 'flex';
+
+    // 建議問題 chips
+    const suggestEl = $('chat-suggestions');
+    suggestEl.innerHTML = '';
+    const suggestions = state.currentChar?.suggestions;
+    if (suggestions && suggestions.length > 0) {
+      suggestEl.style.display = 'flex';
+      suggestions.forEach(q => {
+        const btn = document.createElement('button');
+        btn.className = 'suggestion-chip';
+        btn.textContent = q;
+        btn.onclick = () => { $('chat-input').value = q; sendChat(); };
+        suggestEl.appendChild(btn);
+      });
+    } else {
+      suggestEl.style.display = 'none';
+    }
+
     $('chat-input').onkeydown = (e) => {
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
@@ -142,6 +160,8 @@ const GameEngine = (() => {
     $('chat-area').style.display = 'none';
     $('chat-history').innerHTML = '';
     if ($('chat-input')) $('chat-input').value = '';
+    const suggestEl = $('chat-suggestions');
+    if (suggestEl) { suggestEl.innerHTML = ''; suggestEl.style.display = 'none'; }
   }
 
   /* ---------- 自由對話：發送訊息 ---------- */
