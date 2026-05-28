@@ -8,6 +8,6 @@
     "build": "echo 'Static site, no build required'"
   },
   "devDependencies": {
-    "wrangler": "^3.0.0"
+    "wrangler": "^3.114.17"
   }
 }

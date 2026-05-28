@@ -37,24 +37,33 @@ export async function onRequestPost(context) {
       );
     }
 
-    // 調用 Qwen API (DashScope / Aliyun)
-    const qwenResp = await fetch(
-      'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions',
-      {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${apiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'qwen-turbo',
-          messages,
-          max_tokens: 200,
-          temperature: 0.85,
-          top_p: 0.9,
-        }),
-      }
-    );
+    // 調用 Qwen API (DashScope / Aliyun)，設 6 秒超時
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), 6000);
+
+    let qwenResp;
+    try {
+      qwenResp = await fetch(
+        'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions',
+        {
+          method: 'POST',
+          signal: ctrl.signal,
+          headers: {
+            'Authorization': `Bearer ${apiKey}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            model: 'qwen-turbo',
+            messages,
+            max_tokens: 180,
+            temperature: 0.85,
+            top_p: 0.9,
+          }),
+        }
+      );
+    } finally {
+      clearTimeout(t);
+    }
 
     if (!qwenResp.ok) {
       const errText = await qwenResp.text();
@@ -74,9 +83,10 @@ export async function onRequestPost(context) {
 
   } catch (err) {
     console.error('Function error:', err);
+    const isTimeout = err.name === 'AbortError';
     return new Response(
-      JSON.stringify({ error: '伺服器內部錯誤' }),
-      { status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders } }
+      JSON.stringify({ error: isTimeout ? 'Qwen API 請求超時' : '伺服器內部錯誤' }),
+      { status: isTimeout ? 504 : 500, headers: { 'Content-Type': 'application/json', ...corsHeaders } }
     );
   }
 }

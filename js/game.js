@@ -148,7 +148,7 @@ const GameEngine = (() => {
       el.textContent = '';
       cursor.style.display = 'inline';
       let i = 0;
-      const speed = 40;
+      const speed = 30;
       function tick() {
         if (i < text.length) {
           el.textContent += text[i++];
@@ -260,10 +260,15 @@ const GameEngine = (() => {
       content: `[場景：${node.scene?.title || ''}] [命運指數：${state.fate}] [旗標：${[...state.flags].join(',')}]\n${node.aiPrompt}`,
     });
 
+    // 8 秒超時：避免 loading 一直卡住
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 8000);
+
     try {
       const resp = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal,
         body: JSON.stringify({
           apiKey: state.apiKey,
           messages,
@@ -279,13 +284,18 @@ const GameEngine = (() => {
       const data = await resp.json();
       const text = data.choices?.[0]?.message?.content || node.text;
       state.history.push({ speaker: node.speaker, text });
-      showLoading(false);
       return text;
     } catch (e) {
-      console.error('Qwen API 錯誤：', e);
-      showLoading(false);
-      showToast('AI 對話暫時無法使用，顯示預設文字');
+      if (e.name === 'AbortError') {
+        showToast('⏱ AI 回應逾時，顯示預設文字');
+      } else {
+        console.error('Qwen API 錯誤：', e);
+        showToast('AI 對話暫時無法使用，顯示預設文字');
+      }
       return node.text;
+    } finally {
+      clearTimeout(timer);
+      showLoading(false);
     }
   }
 
