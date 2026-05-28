@@ -707,31 +707,6 @@ body {
 .btn-send:active { transform: scale(0.97); }
 .btn-send:disabled { background: #4a3820; color: #6b6b5a; cursor: not-allowed; }
 
-.btn-mic {
-  font-size: 1.1rem;
-  background: rgba(255,255,255,0.07);
-  border: 1px solid #4a3820;
-  color: var(--rice);
-  padding: 0.4em 0.65em;
-  cursor: pointer;
-  border-radius: 2px;
-  transition: background 0.2s, border-color 0.2s;
-  align-self: stretch;
-  white-space: nowrap;
-  line-height: 1;
-}
-.btn-mic:hover { background: rgba(255,255,255,0.14); }
-.btn-mic.listening {
-  color: #ff6b6b;
-  border-color: #ff6b6b;
-  animation: mic-pulse 0.9s ease-in-out infinite;
-}
-.btn-mic:disabled { opacity: 0.3; cursor: not-allowed; }
-@keyframes mic-pulse {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.4; }
-}
-
 .chat-hint {
   font-size: 0.72rem;
   color: #5a5040;
@@ -1034,4 +1009,52 @@ body {
 @media (max-width: 480px) {
   .bg-how-grid { grid-template-columns: 1fr; }
   .bg-section { padding: 1rem 1rem; }
+}
+
+/* ============================================================
+   iPad 平板優化（700px 以上）
+   ============================================================ */
+@media (min-width: 700px) {
+  /* 開場畫面 */
+  .intro-content { max-width: 700px; gap: 2.5rem; }
+  .poem-line { font-size: clamp(2.4rem, 4vw, 3.4rem); }
+  .intro-desc { font-size: 1rem; }
+
+  /* 遊戲頂欄 */
+  .chapter-bar { padding: 0.75rem 2.5rem; }
+  .fate-track { width: 130px; }
+
+  /* 場景區 */
+  .scene-area { padding: 1.2rem 2.5rem 0.6rem; }
+  .scene-icon { font-size: 3.8rem; }
+  .scene-title { font-size: 1.5rem; }
+
+  /* 對話區 */
+  .dialogue-area { padding: 1rem 2.5rem; max-width: 860px; }
+  .portrait-frame { width: 96px; height: 96px; }
+  .portrait-char { font-size: 3rem; }
+  .portrait-name { font-size: 0.9rem; }
+  .dialogue-text { font-size: 1.05rem; line-height: 2; }
+  .dialogue-box { padding: 1.2rem 1.6rem; }
+
+  /* 選項 */
+  .choices-area { padding: 0.5rem 2.5rem 1rem; max-width: 860px; }
+  .choice-btn { font-size: 1rem; padding: 0.8em 1.5em; }
+
+  /* 自由對話區 */
+  .chat-area { padding: 0 2.5rem 1rem; max-width: 860px; }
+  .chat-history { max-height: 240px; }
+  .chat-textarea { font-size: 1rem; padding: 0.65em 1rem; }
+  .btn-send { font-size: 0.95rem; padding: 0.65em 1.4em; }
+  .suggestion-chip { font-size: 0.82rem; padding: 0.35em 1rem; }
+
+  /* 繼續按鈕 */
+  .btn-continue { margin: 0 2.5rem 1rem; font-size: 0.95rem; padding: 0.6em 2.2em; }
+
+  /* 歷史背景頁 */
+  .bg-scroll-wrap { padding: 2.5rem 2rem 4rem; }
+  .bg-content { max-width: 760px; gap: 2.2rem; }
+  .bg-title { font-size: 2.6rem; }
+  .bg-section { padding: 1.6rem 2rem; }
+  .bg-section-title { font-size: 1.2rem; }
 }
