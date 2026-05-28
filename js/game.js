@@ -20,14 +20,6 @@ const GameEngine = (() => {
   /* ---------- DOM 快取 ---------- */
   const $ = id => document.getElementById(id);
 
-  /* ---------- 儲存 API Key ---------- */
-  function saveApiKey() {
-    const val = $('api-key-input').value.trim();
-    if (!val) { showToast('請輸入 API Key'); return; }
-    state.apiKey = val;
-    showToast('API Key 已儲存 ✓');
-  }
-
   /* ---------- 切換畫面 ---------- */
   function showScreen(id) {
     document.querySelectorAll('.screen').forEach(s => {
@@ -41,15 +33,6 @@ const GameEngine = (() => {
 
   /* ---------- 開始遊戲 ---------- */
   function startGame() {
-    // 讀取 localStorage 的 API key（如有）
-    const stored = localStorage.getItem('qwen_api_key');
-    if (stored) state.apiKey = stored;
-    const inputVal = $('api-key-input').value.trim();
-    if (inputVal) {
-      state.apiKey = inputVal;
-      localStorage.setItem('qwen_api_key', inputVal);
-    }
-
     state.fate = 50;
     state.flags = new Set();
     state.currentNodeId = 'start';
@@ -224,6 +207,40 @@ const GameEngine = (() => {
     return bubble;
   }
 
+  /* ---------- 節點初始 AI 對話 ---------- */
+  async function fetchInitialDialogue(node) {
+    showLoading(true);
+    const char = state.currentChar;
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 8000);
+    try {
+      const messages = [
+        { role: 'system', content: buildSystemPrompt(char) },
+        { role: 'user', content: node.aiPrompt || node.text },
+      ];
+      const resp = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal,
+        body: JSON.stringify({
+          apiKey: state.apiKey,
+          messages,
+          characterId: char?.id || '',
+        }),
+      });
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const data = await resp.json();
+      return data.choices?.[0]?.message?.content || node.text;
+    } catch (e) {
+      if (e.name === 'AbortError') return node.text;
+      console.error('Initial dialogue error:', e);
+      return node.text;
+    } finally {
+      clearTimeout(timer);
+      showLoading(false);
+    }
+  }
+
   /* ---------- 自由對話 AI 請求 ---------- */
   async function fetchChatReply() {
     const controller = new AbortController();
@@ -379,7 +396,7 @@ const GameEngine = (() => {
   }
 
   /* ---------- 公開介面 ---------- */
-  return { startGame, saveApiKey, nextNode, restart, sendChat };
+  return { startGame, nextNode, restart, sendChat };
 })();
 
 /* ---------- 頁面載入初始化 ---------- */
@@ -407,9 +424,5 @@ window.addEventListener('DOMContentLoaded', () => {
     el.style.animationDelay = delay + 'ms';
   });
 
-  // 從 localStorage 讀取 API key
-  const stored = localStorage.getItem('qwen_api_key');
-  if (stored) {
-    document.getElementById('api-key-input').value = stored;
-  }
+
 });
