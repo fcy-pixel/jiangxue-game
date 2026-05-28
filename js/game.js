@@ -142,8 +142,12 @@ const GameEngine = (() => {
 
     // 建立節點 messages 基礎（給後續自由對話用）
     if (state.currentChar) {
+      const initUserPrompt = node.useAI
+        ? (node.aiPrompt || node.text)
+        : node.text;
       state.nodeMessages = [
-        { role: 'system', content: buildSystemPrompt(state.currentChar) },
+        { role: 'system',    content: buildSystemPrompt(state.currentChar) },
+        { role: 'user',      content: initUserPrompt + LANG_REMINDER },
         { role: 'assistant', content: text },
       ];
     }
