@@ -787,3 +787,203 @@ body {
   .dialogue-area { padding: 0.4rem 1rem; }
   .choices-area { padding: 0.3rem 1rem 0.5rem; }
 }
+
+/* ============================================================
+   歷史背景 & 玩法介紹畫面
+   ============================================================ */
+#screen-background {
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.bg-scroll-wrap {
+  min-height: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 2rem 1rem 3rem;
+}
+
+.bg-content {
+  width: 100%;
+  max-width: 680px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* 頂部標題 */
+.bg-header {
+  text-align: center;
+  padding: 1.5rem 0 0.5rem;
+}
+.bg-seal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border: 2px solid var(--gold);
+  border-radius: 4px;
+  font-family: 'Ma Shan Zheng', serif;
+  font-size: 1.8rem;
+  color: var(--gold);
+  margin-bottom: 0.6rem;
+  box-shadow: 0 0 14px rgba(200,150,12,0.25);
+}
+.bg-title {
+  font-family: 'Ma Shan Zheng', serif;
+  font-size: 2.2rem;
+  color: var(--gold-light);
+  letter-spacing: 0.15em;
+}
+.bg-subtitle {
+  margin-top: 0.3rem;
+  color: var(--grey-ink);
+  font-size: 0.95rem;
+  letter-spacing: 0.1em;
+}
+
+/* 分節 */
+.bg-section {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(200,150,12,0.18);
+  border-radius: 8px;
+  padding: 1.4rem 1.5rem;
+}
+.bg-section-you {
+  border-color: rgba(200,150,12,0.45);
+  background: rgba(200,150,12,0.06);
+}
+.bg-section-title {
+  font-family: 'Ma Shan Zheng', serif;
+  font-size: 1.15rem;
+  color: var(--gold);
+  letter-spacing: 0.12em;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(200,150,12,0.2);
+}
+.bg-section-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  color: var(--rice);
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+.bg-section-body strong { color: var(--gold-light); }
+
+/* 人物資料卡 */
+.bg-person-card {
+  margin-bottom: 1rem;
+}
+.bg-person-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.bg-person-row {
+  display: flex;
+  gap: 0.8rem;
+  font-size: 0.93rem;
+  line-height: 1.6;
+  color: var(--rice);
+}
+.bg-label {
+  flex-shrink: 0;
+  width: 2.8em;
+  color: var(--gold);
+  font-weight: 600;
+}
+
+/* 詩歌框 */
+.bg-poem-box {
+  margin-top: 0.8rem;
+  padding: 1rem 1.2rem;
+  background: rgba(0,0,0,0.25);
+  border-left: 3px solid var(--gold);
+  border-radius: 0 6px 6px 0;
+}
+.bg-poem-text {
+  font-family: 'Ma Shan Zheng', serif;
+  font-size: 1.05rem;
+  color: var(--rice);
+  line-height: 2;
+  letter-spacing: 0.05em;
+}
+.bg-poem-note {
+  margin-top: 0.6rem;
+  font-size: 0.85rem;
+  color: var(--grey-ink);
+  line-height: 1.7;
+}
+
+/* 列表 */
+.bg-list {
+  margin: 0.3rem 0 0.3rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--rice-dark);
+}
+
+/* 玩法四格 */
+.bg-how-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.9rem;
+}
+.bg-how-item {
+  display: flex;
+  gap: 0.7rem;
+  align-items: flex-start;
+  background: rgba(0,0,0,0.2);
+  border-radius: 6px;
+  padding: 0.8rem;
+}
+.bg-how-icon {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(200,150,12,0.15);
+  border: 1px solid rgba(200,150,12,0.35);
+  border-radius: 4px;
+  font-family: 'Ma Shan Zheng', serif;
+  font-size: 1.1rem;
+  color: var(--gold);
+}
+.bg-how-text {
+  font-size: 0.85rem;
+  line-height: 1.65;
+  color: var(--rice);
+}
+.bg-how-text strong { color: var(--gold-light); }
+
+/* 底部按鈕 */
+.bg-start-wrap {
+  text-align: center;
+  padding-bottom: 1rem;
+}
+.bg-start-hint {
+  margin-bottom: 1rem;
+  color: var(--grey-ink);
+  font-size: 0.95rem;
+  font-style: italic;
+  letter-spacing: 0.05em;
+}
+.btn-start-game {
+  font-size: 1.1rem !important;
+  padding: 0.9rem 2.5rem !important;
+  letter-spacing: 0.15em !important;
+}
+
+@media (max-width: 480px) {
+  .bg-how-grid { grid-template-columns: 1fr; }
+  .bg-section { padding: 1rem 1rem; }
+}

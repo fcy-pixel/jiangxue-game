@@ -34,7 +34,94 @@
         <p>被貶謫的柳宗元，獨坐寒江之畔，</p>
         <p>命運之輪，即將轉動……</p>
       </div>
-      <button class="btn-ancient" id="btn-start" onclick="GameEngine.startGame()">踏上旅途</button>
+      <button class="btn-ancient" id="btn-start" onclick="showBackground()">認識歷史背景</button>
+    </div>
+  </div>
+
+  <!-- ==================== 歷史背景 & 玩法介紹 ==================== -->
+  <div id="screen-background" class="screen">
+    <div class="bg-scroll-wrap">
+      <div class="bg-content">
+
+        <div class="bg-header">
+          <div class="bg-seal">史</div>
+          <h1 class="bg-title">江雪·問天</h1>
+          <p class="bg-subtitle">穿越千年，成為柳宗元</p>
+        </div>
+
+        <!-- 歷史背景 -->
+        <section class="bg-section">
+          <h2 class="bg-section-title">歷史背景</h2>
+          <div class="bg-section-body">
+            <p>唐朝中期，宦官專權、藩鎮割據，朝廷積弊深重，百姓苦不堪言。</p>
+            <p>公元 805 年，唐順宗即位，一批懷抱理想的年輕官員——以<strong>王叔文</strong>為首，聯同<strong>柳宗元</strong>、<strong>劉禹錫</strong>等人，發動了史稱「<strong>永貞革新</strong>」的政治改革，試圖削減宦官權力，減輕百姓賦稅。</p>
+            <p>然而改革只維持了 <strong>180 天</strong>便宣告失敗。唐憲宗即位，王叔文被賜死，柳宗元等八人遭到流放，史稱「<strong>二王八司馬事件</strong>」。</p>
+            <p>柳宗元被貶至偏遠的<strong>永州</strong>（今湖南），一待便是十年。遠離京城，遠離理想，只有這片寒江白雪相伴。</p>
+          </div>
+        </section>
+
+        <!-- 認識柳宗元 -->
+        <section class="bg-section">
+          <h2 class="bg-section-title">認識柳宗元</h2>
+          <div class="bg-person-card">
+            <div class="bg-person-info">
+              <div class="bg-person-row"><span class="bg-label">全名</span><span>柳宗元，字子厚</span></div>
+              <div class="bg-person-row"><span class="bg-label">生卒</span><span>773 年 — 819 年（享年 47 歲）</span></div>
+              <div class="bg-person-row"><span class="bg-label">籍貫</span><span>河東（今山西）</span></div>
+              <div class="bg-person-row"><span class="bg-label">成就</span><span>唐宋八大家之一，古文運動旗手</span></div>
+              <div class="bg-person-row"><span class="bg-label">名作</span><span>《江雪》《捕蛇者說》《永州八記》</span></div>
+            </div>
+          </div>
+          <div class="bg-poem-box">
+            <p class="bg-poem-text">千山鳥飛絕，萬徑人蹤滅。<br>孤舟蓑笠翁，獨釣寒江雪。</p>
+            <p class="bg-poem-note">這首《江雪》正是柳宗元在永州被貶期間所作，孤獨的漁翁被認為是他內心的寫照。</p>
+          </div>
+        </section>
+
+        <!-- 你的角色 -->
+        <section class="bg-section bg-section-you">
+          <h2 class="bg-section-title">你就是柳宗元</h2>
+          <div class="bg-section-body">
+            <p>在這個遊戲裡，<strong>你就是柳宗元</strong>。</p>
+            <p>現在是被貶的第十年，你獨自坐在永州的寒江小船上。忽然，一封來自故人的信改變了一切——你必須做出抉擇：</p>
+            <ul class="bg-list">
+              <li>繼承改革志向，還是選擇以文學留名？</li>
+              <li>向皇帝低頭，還是堅守自己的理想？</li>
+              <li>追求回京，還是看透名利，隱居山水？</li>
+            </ul>
+            <p>你的每一個選擇，都將決定柳宗元的命運走向，引向四種不同的結局。</p>
+          </div>
+        </section>
+
+        <!-- 遊戲玩法 -->
+        <section class="bg-section">
+          <h2 class="bg-section-title">遊戲玩法</h2>
+          <div class="bg-how-grid">
+            <div class="bg-how-item">
+              <div class="bg-how-icon">選</div>
+              <div class="bg-how-text"><strong>閱讀故事，做出選擇</strong><br>每個場景都有 2–3 個選項，代表你（柳宗元）的決定。</div>
+            </div>
+            <div class="bg-how-item">
+              <div class="bg-how-icon">談</div>
+              <div class="bg-how-text"><strong>與歷史人物自由對話</strong><br>遇到 AI 角色時，可以用中文自由發問，深入了解歷史。</div>
+            </div>
+            <div class="bg-how-item">
+              <div class="bg-how-icon">運</div>
+              <div class="bg-how-text"><strong>命運指數影響結局</strong><br>頂部的命運指數會隨選擇起伏，最終決定你走向哪個結局。</div>
+            </div>
+            <div class="bg-how-item">
+              <div class="bg-how-icon">局</div>
+              <div class="bg-how-text"><strong>四種結局，可以重玩</strong><br>史、文、革、隱——每次重玩都可能解鎖不同的結局。</div>
+            </div>
+          </div>
+        </section>
+
+        <div class="bg-start-wrap">
+          <p class="bg-start-hint">現在，化身柳宗元，踏上這段命運之旅——</p>
+          <button class="btn-ancient btn-start-game" onclick="GameEngine.startGame()">我就是柳宗元，出發！</button>
+        </div>
+
+      </div>
     </div>
   </div>
 
@@ -135,5 +222,18 @@
 
   <!-- 音樂控制 -->
   <button class="music-toggle" id="music-toggle" onclick="AmbientMusic.toggle()" title="古典音樂">&#9834;</button>
+
+  <script>
+    function showBackground() {
+      document.querySelectorAll('.screen').forEach(s => {
+        s.classList.remove('active');
+        s.style.display = 'none';
+      });
+      const s = document.getElementById('screen-background');
+      s.style.display = 'flex';
+      requestAnimationFrame(() => s.classList.add('active'));
+      s.scrollTop = 0;
+    }
+  </script>
 </body>
 </html>
