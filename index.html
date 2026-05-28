@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>江雪·問天 — 柳宗元的選擇</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- 雪花效果 -->
+  <div id="snow-container"></div>
+
+  <!-- 水墨背景裝飾 -->
+  <div class="ink-bg">
+    <div class="mountain mountain-1"></div>
+    <div class="mountain mountain-2"></div>
+    <div class="mountain mountain-3"></div>
+  </div>
+
+  <!-- ==================== 開場畫面 ==================== -->
+  <div id="screen-intro" class="screen active">
+    <div class="intro-content">
+      <div class="poem-container">
+        <div class="poem-line" data-delay="0">千山鳥飛絕</div>
+        <div class="poem-line" data-delay="400">萬徑人蹤滅</div>
+        <div class="poem-line" data-delay="800">孤舟蓑笠翁</div>
+        <div class="poem-line" data-delay="1200">獨釣寒江雪</div>
+        <div class="poem-author" data-delay="1800">— 柳宗元《江雪》</div>
+      </div>
+      <div class="intro-desc" id="intro-desc">
+        <p>永州，元和十年。</p>
+        <p>被貶謫的柳宗元，獨坐寒江之畔，</p>
+        <p>命運之輪，即將轉動……</p>
+      </div>
+      <button class="btn-ancient" id="btn-start" onclick="GameEngine.startGame()">踏上旅途</button>
+      <div class="settings-row">
+        <label for="api-key-input" class="lbl-api">Qwen API Key：</label>
+        <input type="password" id="api-key-input" placeholder="sk-..." class="input-ancient" />
+        <button class="btn-ancient btn-sm" onclick="GameEngine.saveApiKey()">儲存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 故事主畫面 ==================== -->
+  <div id="screen-game" class="screen">
+    <!-- 頂部章節標題 -->
+    <div class="chapter-bar">
+      <span id="chapter-title">第一章</span>
+      <div class="fate-bar">
+        <span class="fate-label">命運指數</span>
+        <div class="fate-track">
+          <div class="fate-fill" id="fate-fill"></div>
+        </div>
+        <span id="fate-value">50</span>
+      </div>
+    </div>
+
+    <!-- 場景圖示 -->
+    <div class="scene-area" id="scene-area">
+      <div class="scene-icon" id="scene-icon">🏔️</div>
+      <div class="scene-title" id="scene-title">寒江垂釣</div>
+    </div>
+
+    <!-- 對話框 -->
+    <div class="dialogue-area">
+      <div class="character-portrait" id="char-portrait">
+        <div class="portrait-frame" id="portrait-frame">
+          <span class="portrait-icon" id="portrait-icon">👤</span>
+        </div>
+        <div class="portrait-name" id="portrait-name">柳宗元</div>
+      </div>
+      <div class="dialogue-box">
+        <div class="dialogue-text" id="dialogue-text">
+          正在載入故事……
+        </div>
+        <div class="typing-cursor" id="typing-cursor">|</div>
+      </div>
+    </div>
+
+    <!-- 選項按鈕 -->
+    <div class="choices-area" id="choices-area"></div>
+
+    <!-- 繼續按鈕 -->
+    <button class="btn-ancient btn-continue" id="btn-continue" onclick="GameEngine.nextNode()" style="display:none">繼續 ›</button>
+
+    <!-- Qwen AI 回應模式提示 -->
+    <div class="ai-badge" id="ai-badge" style="display:none">
+      <span>🤖 AI 角色對話中…</span>
+    </div>
+  </div>
+
+  <!-- ==================== 結局畫面 ==================== -->
+  <div id="screen-ending" class="screen">
+    <div class="ending-content">
+      <div class="ending-seal" id="ending-seal">史</div>
+      <h1 class="ending-title" id="ending-title">歷史結局</h1>
+      <div class="ending-poem" id="ending-poem"></div>
+      <p class="ending-desc" id="ending-desc"></p>
+      <div class="ending-tags" id="ending-tags"></div>
+      <div class="ending-history" id="ending-history"></div>
+      <button class="btn-ancient" onclick="GameEngine.restart()">重新踏上旅途</button>
+    </div>
+  </div>
+
+  <!-- ==================== 載入中 ==================== -->
+  <div id="loading-overlay" style="display:none">
+    <div class="loading-ink">
+      <div class="ink-drop"></div>
+      <p>正在聆聽歷史回聲……</p>
+    </div>
+  </div>
+
+  <script src="js/characters.js"></script>
+  <script src="js/story.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>

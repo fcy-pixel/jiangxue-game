@@ -1,0 +1,13 @@
+{
+  "name": "jiangxue-game",
+  "version": "1.0.0",
+  "description": "江雪·問天 — 以柳宗元《江雪》為主題的互動歷史文學遊戲",
+  "scripts": {
+    "dev": "wrangler pages dev . --port 8788",
+    "deploy": "wrangler pages deploy . --project-name jiangxue-game",
+    "build": "echo 'Static site, no build required'"
+  },
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  }
+}

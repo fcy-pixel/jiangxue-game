@@ -1,0 +1,603 @@
+/* ============================================================
+   江雪·問天  —  中國水墨風格介面
+   ============================================================ */
+
+/* ---------- CSS 變量 ---------- */
+:root {
+  --ink: #1a1008;
+  --ink-light: #3d2b1f;
+  --rice: #f5f0e8;
+  --rice-dark: #e8dcc8;
+  --gold: #c8960c;
+  --gold-light: #e8b84b;
+  --red: #8b1a1a;
+  --red-bright: #c0392b;
+  --blue-ink: #1a3a5c;
+  --grey-ink: #6b6b5a;
+  --shadow-ink: rgba(26,16,8,0.4);
+}
+
+/* ---------- 基礎重設 ---------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Noto Serif SC', 'Ma Shan Zheng', serif;
+  background: #0d0a06;
+  color: var(--rice);
+  overflow: hidden;
+  height: 100dvh;
+  width: 100vw;
+  position: relative;
+}
+
+/* ---------- 水墨背景山水 ---------- */
+.ink-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: 
+    radial-gradient(ellipse 120% 60% at 50% 110%, #0a0704 0%, transparent 70%),
+    linear-gradient(180deg, #0d0a06 0%, #1a1208 40%, #0d0a06 100%);
+}
+
+.mountain {
+  position: absolute;
+  bottom: 0;
+  opacity: 0.18;
+}
+
+.mountain::before {
+  content: '';
+  position: absolute;
+  border-style: solid;
+  border-color: transparent;
+  border-bottom-color: #2a2015;
+}
+
+.mountain-1 {
+  left: -5%;
+  width: 55%;
+  height: 55vh;
+  background: radial-gradient(ellipse 90% 100% at 50% 100%, #1c1508 0%, transparent 70%);
+  clip-path: polygon(0% 100%, 30% 10%, 60% 60%, 100% 100%);
+}
+.mountain-2 {
+  right: -10%;
+  width: 65%;
+  height: 65vh;
+  background: radial-gradient(ellipse 90% 100% at 50% 100%, #141005 0%, transparent 70%);
+  clip-path: polygon(0% 100%, 35% 5%, 65% 50%, 100% 100%);
+}
+.mountain-3 {
+  left: 20%;
+  width: 60%;
+  height: 40vh;
+  background: radial-gradient(ellipse 90% 100% at 50% 100%, #201809 0%, transparent 70%);
+  clip-path: polygon(0% 100%, 50% 20%, 100% 100%);
+  opacity: 0.12;
+}
+
+/* ---------- 雪花 ---------- */
+#snow-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.snowflake {
+  position: absolute;
+  top: -10px;
+  color: #d0cfc0;
+  font-size: 1em;
+  animation: snowfall linear infinite;
+  opacity: 0;
+  user-select: none;
+}
+
+@keyframes snowfall {
+  0%   { transform: translateY(-10px) rotate(0deg); opacity: 0; }
+  10%  { opacity: 0.8; }
+  90%  { opacity: 0.6; }
+  100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+}
+
+/* ---------- 畫面容器 ---------- */
+.screen {
+  position: fixed;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: opacity 0.8s ease;
+  opacity: 0;
+}
+.screen.active {
+  display: flex;
+  opacity: 1;
+}
+.screen.fade-in {
+  animation: fadeIn 0.8s ease forwards;
+}
+.screen.fade-out {
+  animation: fadeOut 0.5s ease forwards;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+
+/* ============================================================
+   開場畫面
+   ============================================================ */
+.intro-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 600px;
+  width: 100%;
+}
+
+/* 詩句動畫 */
+.poem-container {
+  text-align: center;
+  line-height: 1;
+}
+
+.poem-line {
+  font-family: 'Ma Shan Zheng', serif;
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  color: var(--rice);
+  letter-spacing: 0.3em;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: riseIn 1s ease forwards;
+  text-shadow: 0 0 30px rgba(200,150,12,0.3), 0 2px 4px var(--shadow-ink);
+  display: block;
+  padding: 0.2em 0;
+}
+
+.poem-author {
+  font-size: clamp(0.85rem, 2vw, 1.1rem);
+  color: var(--gold);
+  letter-spacing: 0.2em;
+  opacity: 0;
+  margin-top: 1rem;
+  animation: riseIn 1s ease forwards;
+}
+
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.intro-desc {
+  text-align: center;
+  color: var(--grey-ink);
+  font-size: clamp(0.8rem, 2vw, 1rem);
+  line-height: 2;
+  opacity: 0;
+  animation: fadeIn 1.5s ease 2.5s forwards;
+}
+
+/* ---------- 古風按鈕 ---------- */
+.btn-ancient {
+  font-family: 'Noto Serif SC', serif;
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+  letter-spacing: 0.3em;
+  color: var(--gold);
+  background: transparent;
+  border: 1px solid var(--gold);
+  padding: 0.7em 2.5em;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+  clip-path: polygon(8px 0%, calc(100% - 8px) 0%, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0% calc(100% - 8px), 0% 8px);
+  opacity: 0;
+  animation: fadeIn 1s ease 3s forwards;
+}
+.btn-ancient::before, .btn-ancient::after {
+  content: '';
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-color: var(--gold-light);
+  border-style: solid;
+  transition: all 0.3s;
+}
+.btn-ancient::before { top: -2px; left: -2px; border-width: 2px 0 0 2px; }
+.btn-ancient::after  { bottom: -2px; right: -2px; border-width: 0 2px 2px 0; }
+.btn-ancient:hover {
+  background: rgba(200,150,12,0.15);
+  box-shadow: 0 0 20px rgba(200,150,12,0.3);
+  color: var(--gold-light);
+  letter-spacing: 0.4em;
+}
+.btn-ancient.btn-sm {
+  font-size: 0.85rem;
+  padding: 0.4em 1.2em;
+  animation: none;
+  opacity: 1;
+}
+
+/* API Key 輸入 */
+.settings-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  opacity: 0;
+  animation: fadeIn 1s ease 3.5s forwards;
+}
+.lbl-api {
+  font-size: 0.82rem;
+  color: var(--grey-ink);
+  letter-spacing: 0.1em;
+}
+.input-ancient {
+  font-family: monospace;
+  font-size: 0.82rem;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid #4a3820;
+  color: var(--rice);
+  padding: 0.4em 0.8em;
+  width: 220px;
+  outline: none;
+  border-radius: 2px;
+}
+.input-ancient:focus { border-color: var(--gold); }
+
+/* ============================================================
+   遊戲主畫面
+   ============================================================ */
+#screen-game {
+  justify-content: flex-start;
+  padding: 0;
+}
+
+/* 章節頂欄 */
+.chapter-bar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 1.5rem;
+  background: rgba(10,8,4,0.85);
+  border-bottom: 1px solid #3a2810;
+  backdrop-filter: blur(4px);
+  z-index: 20;
+}
+#chapter-title {
+  font-family: 'Ma Shan Zheng', serif;
+  font-size: clamp(1rem, 3vw, 1.3rem);
+  color: var(--gold);
+  letter-spacing: 0.2em;
+}
+.fate-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--grey-ink);
+}
+.fate-track {
+  width: 100px;
+  height: 6px;
+  background: #2a1e10;
+  border: 1px solid #4a3820;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.fate-fill {
+  height: 100%;
+  width: 50%;
+  background: linear-gradient(90deg, var(--blue-ink), var(--gold));
+  transition: width 0.8s ease;
+  border-radius: 3px;
+}
+#fate-value { color: var(--gold); font-size: 0.85rem; min-width: 24px; }
+
+/* 場景區 */
+.scene-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 1rem 1rem 0.5rem;
+  flex: 0 0 auto;
+}
+.scene-icon { font-size: 3rem; filter: drop-shadow(0 0 12px rgba(200,150,12,0.4)); }
+.scene-title {
+  font-family: 'Ma Shan Zheng', serif;
+  font-size: clamp(1rem, 3vw, 1.4rem);
+  color: var(--gold);
+  letter-spacing: 0.25em;
+}
+
+/* 對話區 */
+.dialogue-area {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  max-width: 800px;
+  padding: 0.8rem 1.2rem;
+  flex: 1 1 auto;
+  align-items: flex-start;
+  min-height: 0;
+}
+
+.character-portrait {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  flex: 0 0 auto;
+}
+.portrait-frame {
+  width: clamp(60px, 10vw, 80px);
+  height: clamp(60px, 10vw, 80px);
+  border: 2px solid var(--gold);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(26,16,8,0.7);
+  font-size: clamp(2rem, 5vw, 2.8rem);
+  position: relative;
+  box-shadow: inset 0 0 10px rgba(200,150,12,0.1), 0 0 15px rgba(200,150,12,0.15);
+}
+.portrait-frame::before, .portrait-frame::after {
+  content: '';
+  position: absolute;
+  width: 8px; height: 8px;
+  border-color: var(--gold-light);
+  border-style: solid;
+}
+.portrait-frame::before { top: -3px; left: -3px; border-width: 2px 0 0 2px; }
+.portrait-frame::after  { bottom: -3px; right: -3px; border-width: 0 2px 2px 0; }
+
+.portrait-name {
+  font-size: clamp(0.7rem, 2vw, 0.85rem);
+  color: var(--gold);
+  letter-spacing: 0.15em;
+  white-space: nowrap;
+}
+
+.dialogue-box {
+  flex: 1;
+  background: rgba(10,8,4,0.75);
+  border: 1px solid #4a3820;
+  border-radius: 4px;
+  padding: 1rem 1.2rem;
+  min-height: 100px;
+  position: relative;
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
+}
+.dialogue-box::before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: 20px;
+  border-style: solid;
+  border-width: 6px 8px 6px 0;
+  border-color: transparent #4a3820 transparent transparent;
+}
+
+.dialogue-text {
+  font-size: clamp(0.85rem, 2.2vw, 1.05rem);
+  line-height: 1.9;
+  color: var(--rice);
+  min-height: 3em;
+  white-space: pre-wrap;
+}
+
+.typing-cursor {
+  display: inline-block;
+  color: var(--gold);
+  animation: blink 0.7s infinite;
+  font-weight: bold;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+/* 選項區 */
+.choices-area {
+  width: 100%;
+  max-width: 800px;
+  padding: 0.5rem 1.2rem 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.choice-btn {
+  font-family: 'Noto Serif SC', serif;
+  font-size: clamp(0.82rem, 2vw, 0.98rem);
+  letter-spacing: 0.1em;
+  color: var(--rice);
+  background: rgba(26,16,8,0.6);
+  border: 1px solid #4a3820;
+  padding: 0.65em 1.2em;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.25s ease;
+  position: relative;
+  clip-path: polygon(6px 0%, calc(100% - 6px) 0%, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0% calc(100% - 6px), 0% 6px);
+}
+.choice-btn::before {
+  content: '◈ ';
+  color: var(--gold);
+  font-size: 0.8em;
+}
+.choice-btn:hover {
+  background: rgba(200,150,12,0.12);
+  border-color: var(--gold);
+  color: var(--gold-light);
+  padding-left: 1.6em;
+}
+
+/* 繼續按鈕 */
+.btn-continue {
+  animation: none;
+  opacity: 1;
+  align-self: flex-end;
+  margin: 0 1.2rem 0.8rem;
+  font-size: 0.9rem;
+  padding: 0.5em 1.8em;
+}
+
+/* AI 狀態徽章 */
+.ai-badge {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  background: rgba(10,8,4,0.85);
+  border: 1px solid var(--gold);
+  padding: 0.4em 0.9em;
+  font-size: 0.75rem;
+  color: var(--gold);
+  border-radius: 2px;
+  letter-spacing: 0.1em;
+  animation: pulse 1.5s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+/* ============================================================
+   結局畫面
+   ============================================================ */
+.ending-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 2rem;
+  max-width: 680px;
+  width: 100%;
+  text-align: center;
+}
+
+.ending-seal {
+  width: 80px;
+  height: 80px;
+  border: 3px solid var(--red);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Ma Shan Zheng', serif;
+  font-size: 2.5rem;
+  color: var(--red);
+  box-shadow: 0 0 20px rgba(139,26,26,0.4), inset 0 0 10px rgba(139,26,26,0.1);
+  transform: rotate(-5deg);
+  text-shadow: 0 0 10px rgba(192,57,43,0.6);
+}
+
+.ending-title {
+  font-family: 'Ma Shan Zheng', serif;
+  font-size: clamp(1.6rem, 5vw, 2.4rem);
+  color: var(--gold);
+  letter-spacing: 0.3em;
+  text-shadow: 0 0 20px rgba(200,150,12,0.4);
+}
+
+.ending-poem {
+  font-family: 'Ma Shan Zheng', serif;
+  font-size: clamp(1rem, 3vw, 1.3rem);
+  color: var(--rice);
+  line-height: 2.2;
+  letter-spacing: 0.2em;
+  border-left: 3px solid var(--gold);
+  padding-left: 1rem;
+  text-align: left;
+}
+
+.ending-desc {
+  font-size: clamp(0.85rem, 2.2vw, 1rem);
+  color: var(--grey-ink);
+  line-height: 1.9;
+  max-width: 500px;
+}
+
+.ending-tags {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.tag {
+  font-size: 0.75rem;
+  color: var(--gold);
+  border: 1px solid var(--gold);
+  padding: 0.25em 0.8em;
+  letter-spacing: 0.15em;
+}
+
+.ending-history {
+  font-size: 0.82rem;
+  color: #5a5040;
+  line-height: 1.8;
+  border-top: 1px solid #3a2810;
+  padding-top: 1rem;
+  max-width: 500px;
+  text-align: left;
+}
+
+/* ============================================================
+   載入覆蓋層
+   ============================================================ */
+#loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  backdrop-filter: blur(4px);
+}
+
+.loading-ink {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  color: var(--gold);
+  font-size: 0.9rem;
+  letter-spacing: 0.2em;
+}
+
+.ink-drop {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--gold) 0%, transparent 70%);
+  animation: inkPulse 1.2s ease-in-out infinite;
+}
+@keyframes inkPulse {
+  0%,100% { transform: scale(0.6); opacity: 0.4; }
+  50%      { transform: scale(1); opacity: 1; }
+}
+
+/* ============================================================
+   捲軸裝飾線（橫向分隔）
+   ============================================================ */
+.divider {
+  width: 80%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0.4;
+}
+
+/* ============================================================
+   RWD
+   ============================================================ */
+@media (max-height: 600px) {
+  .scene-area { padding: 0.4rem 1rem 0.2rem; }
+  .scene-icon { font-size: 2rem; }
+  .dialogue-area { padding: 0.4rem 1rem; }
+  .choices-area { padding: 0.3rem 1rem 0.5rem; }
+}
