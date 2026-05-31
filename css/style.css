@@ -1268,3 +1268,543 @@ body {
   .bg-section { padding: 1.6rem 2rem; }
   .bg-section-title { font-size: 1.2rem; }
 }
+
+/* ============================================================
+   角色養成系統 新增樣式
+   ============================================================ */
+
+/* ── 頂欄按鈕 ── */
+.topbar-actions {
+  display: flex;
+  gap: 0.35rem;
+  margin-left: 0.6rem;
+  flex-shrink: 0;
+}
+.topbar-btn {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  background: rgba(200,150,12,0.12);
+  border: 1px solid rgba(200,150,12,0.4);
+  color: var(--gold);
+  padding: 0.2em 0.65em;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background 0.2s, border-color 0.2s;
+  white-space: nowrap;
+}
+.topbar-btn:hover {
+  background: rgba(200,150,12,0.28);
+  border-color: var(--gold);
+}
+
+/* ── 好感度條 ── */
+.char-affinity {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.25rem;
+  font-size: 0.65rem;
+}
+.affinity-label {
+  color: var(--gold);
+  min-width: 30px;
+  text-align: center;
+  font-size: 0.64rem;
+  letter-spacing: 0.04em;
+  transition: color 0.5s;
+}
+.affinity-track {
+  width: 48px;
+  height: 4px;
+  background: #2a1e10;
+  border-radius: 2px;
+  overflow: hidden;
+  border: 1px solid #3a2810;
+}
+.affinity-fill {
+  height: 100%;
+  width: 45%;
+  background: linear-gradient(90deg, #5d7fb0, var(--gold));
+  transition: width 0.8s ease, background 0.5s;
+  border-radius: 2px;
+}
+.affinity-value {
+  color: var(--rice);
+  min-width: 18px;
+  font-size: 0.63rem;
+}
+
+/* ── 選項好感度提示 ── */
+.choice-rel-hint {
+  display: block;
+  margin-top: 0.3rem;
+  color: #c8a030;
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  opacity: 0.85;
+}
+
+/* ── 面板覆蓋層 ── */
+.panel-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(3,2,1,0.92);
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease;
+}
+.panel-inner {
+  background: linear-gradient(150deg, #130c05, #1c1208);
+  border: 1px solid #4a3820;
+  border-radius: 4px;
+  width: min(92vw, 660px);
+  max-height: 82vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 0 50px rgba(200,150,12,0.18), 0 20px 60px rgba(0,0,0,0.6);
+}
+.panel-header {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.9rem 1.2rem 0.7rem;
+  border-bottom: 1px solid #3a2810;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+.panel-title {
+  font-family: 'Ma Shan Zheng', serif;
+  color: var(--gold);
+  font-size: 1.2rem;
+  letter-spacing: 0.2em;
+  margin-right: auto;
+}
+.panel-tabs {
+  display: flex;
+  gap: 0.4rem;
+}
+.panel-tab {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  background: transparent;
+  border: 1px solid #4a3820;
+  color: var(--grey-ink);
+  padding: 0.25em 0.9em;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.2s;
+}
+.panel-tab.active, .panel-tab:hover {
+  background: rgba(200,150,12,0.15);
+  border-color: var(--gold);
+  color: var(--gold);
+}
+.panel-close {
+  background: none;
+  border: 1px solid #4a3820;
+  color: var(--grey-ink);
+  padding: 0.2rem 0.55rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+  border-radius: 2px;
+  transition: color 0.2s, border-color 0.2s;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.panel-close:hover { color: var(--gold); border-color: var(--gold); }
+.panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem 1.1rem;
+  scrollbar-width: thin;
+  scrollbar-color: #4a3820 transparent;
+}
+.panel-body::-webkit-scrollbar { width: 4px; }
+.panel-body::-webkit-scrollbar-thumb { background: #4a3820; border-radius: 2px; }
+.panel-hint {
+  padding: 0.5rem 1.2rem 0.75rem;
+  color: #4a3830;
+  font-size: 0.72rem;
+  text-align: center;
+  border-top: 1px solid #2a1a10;
+  flex-shrink: 0;
+  letter-spacing: 0.04em;
+}
+
+/* ── 典籍格子 ── */
+.collection-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 0.7rem;
+}
+.work-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid #3a2810;
+  padding: 0.8rem 0.85rem;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+  position: relative;
+}
+.work-card:hover {
+  border-color: var(--gold);
+  box-shadow: 0 0 14px rgba(200,150,12,0.25);
+  transform: translateY(-2px);
+}
+.work-card.locked { opacity: 0.38; cursor: default; }
+.work-card.locked:hover { border-color: #3a2810; box-shadow: none; transform: none; }
+.work-title {
+  font-family: 'Ma Shan Zheng', serif;
+  color: var(--gold);
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.25rem;
+}
+.work-unknown { color: #5a5040; }
+.work-type { color: var(--grey-ink); font-size: 0.68rem; margin-bottom: 0.3rem; letter-spacing: 0.06em; }
+.work-rarity { color: #e8b84b; font-size: 0.72rem; letter-spacing: -1px; margin-bottom: 0.3rem; }
+.work-excerpt {
+  color: #907860;
+  font-size: 0.72rem;
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.work-locked-text { color: #4a3830; font-size: 0.7rem; font-style: italic; }
+
+/* ── 典籍詳情 Modal ── */
+.work-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(2,1,0,0.95);
+  z-index: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.25s ease;
+}
+.work-detail-inner {
+  background: linear-gradient(150deg, #130c05, #1c1208);
+  border: 1px solid var(--gold);
+  padding: 1.5rem 1.6rem;
+  max-width: 520px;
+  width: 90vw;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 0 40px rgba(200,150,12,0.25);
+}
+.work-detail-title {
+  font-family: 'Ma Shan Zheng', serif;
+  color: var(--gold);
+  font-size: 1.7rem;
+  letter-spacing: 0.15em;
+  margin-bottom: 0.3rem;
+}
+.work-detail-meta { color: var(--grey-ink); font-size: 0.78rem; margin-bottom: 1rem; }
+.work-detail-stars { color: #e8b84b; letter-spacing: -1px; }
+.work-detail-content {
+  color: var(--rice);
+  line-height: 2.2;
+  font-size: clamp(0.9rem, 2.5vw, 1.05rem);
+  white-space: pre-wrap;
+  border-left: 3px solid var(--gold);
+  padding-left: 1rem;
+  margin-bottom: 1.2rem;
+  font-family: 'Ma Shan Zheng', serif;
+  letter-spacing: 0.08em;
+}
+.work-detail-note {
+  color: var(--grey-ink);
+  font-size: 0.82rem;
+  line-height: 1.85;
+  padding: 0.85rem 1rem;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid #3a2810;
+  margin-bottom: 1rem;
+}
+.work-detail-close {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  padding: 0.55rem;
+  cursor: pointer;
+  font-family: 'Noto Serif SC', serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.15em;
+  transition: background 0.2s;
+}
+.work-detail-close:hover { background: rgba(200,150,12,0.15); }
+
+/* ── 心法格子 ── */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.7rem;
+}
+.skill-card {
+  padding: 0.9rem 0.85rem;
+  border: 1px solid #3a2810;
+  text-align: center;
+  transition: border-color 0.2s;
+}
+.skill-card.unlocked { border-color: rgba(200,150,12,0.35); }
+.skill-card.locked { opacity: 0.35; }
+.skill-icon {
+  font-family: 'Ma Shan Zheng', serif;
+  font-size: 1.8rem;
+  width: 48px;
+  height: 48px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 0.5rem;
+  opacity: 0.9;
+}
+.locked-icon { color: #4a3830; border-color: #3a2810; }
+.skill-name {
+  font-family: 'Ma Shan Zheng', serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.35rem;
+}
+.locked-name { color: #4a3830; }
+.skill-desc { color: var(--grey-ink); font-size: 0.68rem; line-height: 1.5; }
+
+/* ── 成就格子 ── */
+.achievement-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 0.6rem;
+}
+.ach-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid #3a2810;
+  padding: 0.75rem 0.7rem;
+  text-align: center;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.ach-card.unlocked {
+  border-color: rgba(200,150,12,0.45);
+  box-shadow: 0 0 8px rgba(200,150,12,0.1);
+}
+.ach-card.locked { opacity: 0.32; }
+.ach-icon {
+  font-family: 'Ma Shan Zheng', serif;
+  font-size: 1.5rem;
+  color: var(--gold);
+  margin-bottom: 0.3rem;
+  display: block;
+}
+.ach-card.locked .ach-icon { color: #3a3028; }
+.ach-name {
+  color: var(--gold);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  font-family: 'Ma Shan Zheng', serif;
+  margin-bottom: 0.2rem;
+}
+.ach-card.locked .ach-name { color: #3a3028; }
+.ach-desc { color: var(--grey-ink); font-size: 0.63rem; line-height: 1.4; }
+.ach-card.locked .ach-desc { color: #3a3028; }
+
+/* ── 境界突破特效 ── */
+#realm-breakthrough {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.94);
+  z-index: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+#realm-breakthrough.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+.realm-rays {
+  position: absolute;
+  inset: 0;
+  background: conic-gradient(
+    from 0deg at 50% 50%,
+    transparent 0deg, rgba(200,150,12,0.07) 4deg, transparent 8deg,
+    transparent 18deg, rgba(200,150,12,0.05) 22deg, transparent 26deg,
+    transparent 36deg, rgba(200,150,12,0.07) 40deg, transparent 44deg,
+    transparent 54deg, rgba(200,150,12,0.05) 58deg, transparent 62deg,
+    transparent 72deg, rgba(200,150,12,0.07) 76deg, transparent 80deg,
+    transparent 90deg, rgba(200,150,12,0.05) 94deg, transparent 98deg,
+    transparent 108deg, rgba(200,150,12,0.07) 112deg, transparent 116deg,
+    transparent 126deg, rgba(200,150,12,0.05) 130deg, transparent 134deg,
+    transparent 144deg, rgba(200,150,12,0.07) 148deg, transparent 152deg,
+    transparent 162deg, rgba(200,150,12,0.05) 166deg, transparent 170deg,
+    transparent 180deg, rgba(200,150,12,0.07) 184deg, transparent 188deg,
+    transparent 198deg, rgba(200,150,12,0.05) 202deg, transparent 206deg,
+    transparent 216deg, rgba(200,150,12,0.07) 220deg, transparent 224deg,
+    transparent 234deg, rgba(200,150,12,0.05) 238deg, transparent 242deg,
+    transparent 252deg, rgba(200,150,12,0.07) 256deg, transparent 260deg,
+    transparent 270deg, rgba(200,150,12,0.05) 274deg, transparent 278deg,
+    transparent 288deg, rgba(200,150,12,0.07) 292deg, transparent 296deg,
+    transparent 306deg, rgba(200,150,12,0.05) 310deg, transparent 314deg,
+    transparent 324deg, rgba(200,150,12,0.07) 328deg, transparent 332deg,
+    transparent 342deg, rgba(200,150,12,0.05) 346deg, transparent 350deg
+  );
+  animation: spinRays 10s linear infinite;
+}
+@keyframes spinRays {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.realm-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  animation: realmAppear 0.7s cubic-bezier(0.34,1.56,0.64,1) forwards;
+}
+@keyframes realmAppear {
+  0%   { transform: scale(0.3) translateY(20px); opacity: 0; }
+  70%  { transform: scale(1.08) translateY(-4px); opacity: 1; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+.realm-kicker {
+  color: var(--gold);
+  font-size: 0.82rem;
+  letter-spacing: 0.4em;
+  margin-bottom: 1rem;
+  opacity: 0.75;
+  text-transform: uppercase;
+}
+.realm-name {
+  font-family: 'Ma Shan Zheng', serif;
+  font-size: clamp(3.2rem, 14vw, 5.5rem);
+  color: var(--gold-light);
+  letter-spacing: 0.2em;
+  text-shadow:
+    0 0 30px rgba(200,150,12,0.9),
+    0 0 70px rgba(200,150,12,0.5),
+    0 0 120px rgba(200,150,12,0.2);
+  line-height: 1.1;
+  margin-bottom: 1rem;
+}
+.realm-note {
+  color: var(--rice);
+  font-size: clamp(0.85rem, 2.5vw, 1rem);
+  letter-spacing: 0.2em;
+  opacity: 0.75;
+}
+
+/* ── 解鎖 Toast ── */
+#unlock-toast {
+  position: fixed;
+  top: 5rem;
+  right: -280px;
+  background: linear-gradient(135deg, rgba(200,150,12,0.18), rgba(20,12,6,0.97));
+  border: 1px solid var(--gold);
+  border-radius: 3px;
+  padding: 0.65rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  z-index: 500;
+  min-width: 210px;
+  transition: right 0.4s cubic-bezier(0.34,1.2,0.64,1);
+  box-shadow: 0 4px 20px rgba(200,150,12,0.3), 0 0 0 1px rgba(200,150,12,0.15);
+  pointer-events: none;
+}
+#unlock-toast.show { right: 1rem; }
+.unlock-toast-icon {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 6px rgba(200,150,12,0.6));
+}
+.unlock-toast-type {
+  color: var(--gold);
+  font-size: 0.66rem;
+  letter-spacing: 0.2em;
+  opacity: 0.9;
+  margin-bottom: 0.1rem;
+}
+.unlock-toast-name {
+  color: var(--rice);
+  font-size: 0.92rem;
+  font-family: 'Ma Shan Zheng', serif;
+  letter-spacing: 0.1em;
+}
+
+/* ── 結局頁：人脈情誼 ── */
+.ending-relations {
+  width: 100%;
+  max-width: 560px;
+}
+.ending-relations-title {
+  color: var(--gold);
+  font-size: 0.8rem;
+  letter-spacing: 0.25em;
+  margin-bottom: 0.65rem;
+  text-align: center;
+  opacity: 0.85;
+}
+.relations-grid {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.rel-badge {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid #3a2810;
+  padding: 0.45rem 0.7rem;
+  text-align: center;
+  min-width: 72px;
+  flex: 1;
+  max-width: 100px;
+}
+.rel-badge-name { color: var(--gold); font-size: 0.7rem; letter-spacing: 0.08em; margin-bottom: 0.15rem; }
+.rel-badge-level { font-size: 0.65rem; margin-bottom: 0.2rem; transition: color 0.5s; }
+.rel-badge-bar { height: 3px; background: #2a1a10; border-radius: 2px; overflow: hidden; }
+.rel-badge-fill { height: 100%; transition: width 0.6s ease; border-radius: 2px; }
+
+/* ── 結局頁：收藏/成就統計 ── */
+.ending-stats {
+  width: 100%;
+  max-width: 320px;
+  border: 1px solid #3a2810;
+  background: rgba(255,255,255,0.03);
+  padding: 0.6rem 1rem;
+}
+.ending-stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--grey-ink);
+  font-size: 0.78rem;
+  padding: 0.25rem 0;
+  letter-spacing: 0.06em;
+}
+.ending-stat-row + .ending-stat-row { border-top: 1px solid #2a1a10; }
+.ending-stat-row span:last-child { color: var(--gold); font-size: 0.82rem; }
+
+/* ── 選項按鈕 hover 加強（已有基礎） ── */
+.choice-btn:hover .choice-rel-hint { opacity: 1; color: var(--gold-light); }
+
+/* ── 結局頁捲動 ── */
+#screen-ending {
+  overflow-y: auto;
+  align-items: flex-start;
+  padding-top: 1rem;
+}
+.ending-content {
+  padding-bottom: 3rem;
+}
+

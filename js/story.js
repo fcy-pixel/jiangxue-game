@@ -1,22 +1,11 @@
 /**
  * story.js
- * 故事節點系統 — 江雪·問天
+ * 故事節點系統 — 江雪·問天（角色養成版）
  *
- * node 結構：
- * {
- *   id: string,
- *   chapter: string,          // 章節標題
- *   scene: { icon, title },   // 場景圖示
- *   speaker: characterId,     // 說話者
- *   text: string,             // 對話文本（靜態）
- *   useAI: bool,              // 是否用 Qwen AI 動態生成
- *   aiPrompt: string,         // 傳給 AI 的提示（context）
- *   choices: [                // 選項（空陣列 = 繼續按鈕）
- *     { text, nextId, fateDelta, flag }
- *   ],
- *   next: string,             // 無選項時的下一節點
- *   ending: endingId,         // 觸發結局
- * }
+ * 新增欄位：
+ *   relDelta: { charId: delta }   — 影響好感度
+ *   achievement: string           — 觸發成就（節點到達時）
+ *   collectWork: workId           — 自動收集典籍
  */
 
 const STORY = {
@@ -29,6 +18,7 @@ const STORY = {
     chapter: '序章·寒江',
     scene: { icon: '雪', title: '永州·寒江之畔' },
     speaker: 'liuzongyuan',
+    collectWork: 'jiangxue',
     text: '千山都沒有鳥的蹤跡，萬條小路也沒有人的足跡。\n我柳宗元，獨自坐在這艘小船上，在白雪覆蓋的江面垂釣……\n已經是被貶謫的第五年了，京城，是否還記得我？',
     choices: [],
     next: 'ch1_messenger_arrive',
@@ -42,6 +32,7 @@ const STORY = {
     chapter: '第一章·舊夢',
     scene: { icon: '令', title: '信使抵達' },
     speaker: 'wangshuwwen',
+    achievement: 'first_step',
     text: '子厚！我雖然已經不在人世，但昔日的同伴仍然記掛著你。\n革新雖然失敗了，但改革的志向不能熄滅——\n有人帶著我的遺書前來，希望你能繼承我未完成的志向。',
     useAI: true,
     aiPrompt: '王叔文已死，以靈魂或夢境的形式出現。他鼓勵柳宗元繼承改革意志，充滿激情但也帶著遺憾。說一段鼓勵柳宗元的話，提到永貞革新的理想。',
@@ -51,18 +42,23 @@ const STORY = {
         nextId: 'ch1_accept_legacy',
         fateDelta: +15,
         flag: 'reform_spirit',
+        relDelta: { wangshuwwen: +30 },
+        achievement: 'reform_fire',
+        collectWork: 'fengjianlu',
       },
       {
         text: '改革已敗，再爭只會招來更多貶謫，不如安心著書。',
         nextId: 'ch1_decline_legacy',
         fateDelta: -5,
         flag: 'literary_path',
+        relDelta: { wangshuwwen: -10 },
       },
       {
         text: '我已心灰意冷，連這漁翁的日子也不知能撐幾日……',
         nextId: 'ch1_despair',
         fateDelta: -15,
         flag: 'despair',
+        relDelta: { wangshuwwen: -20 },
       },
     ],
   },
@@ -105,6 +101,7 @@ const STORY = {
     chapter: '第二章·友情',
     scene: { icon: '信', title: '夢得來信' },
     speaker: 'liuyuxi',
+    achievement: 'liuyuxi_bond',
     text: '子厚！我劉夢得也在朗州受苦，但看看這裡的巴山楚水，竟也別有詩意！\n聽聞你在永州著書立說，痛快！\n咱們兩個，被貶也要把詩寫得比那些達官貴人強十倍！',
     useAI: true,
     aiPrompt: '劉禹錫寫信給柳宗元，充滿樂觀豪情。他分享自己在朗州的生活，鼓勵柳宗元振作，引用或化用他自己的名句，充滿豪氣。',
@@ -114,12 +111,15 @@ const STORY = {
         nextId: 'ch2_writing_spirit',
         fateDelta: +10,
         flag: 'wenxue_achievement',
+        relDelta: { liuyuxi: +20 },
+        collectWork: 'xiaoshitanjie',
       },
       {
         text: '夢得，你可有法子向朝廷申訴，盼早日回京？',
         nextId: 'ch2_seek_return',
         fateDelta: +5,
         flag: 'seek_recall',
+        relDelta: { liuyuxi: +10, emperor: +5 },
       },
     ],
   },
@@ -138,12 +138,15 @@ const STORY = {
         nextId: 'ch2_enlightened',
         fateDelta: +20,
         flag: 'dao_wisdom',
+        relDelta: { fisherman: +35 },
+        achievement: 'dao_wisdom_ach',
       },
       {
         text: '我還有大志未能實現，怎能這樣逍遙自在？',
         nextId: 'ch2_liuyuxi_letter',
         fateDelta: +5,
         flag: 'reform_spirit',
+        relDelta: { fisherman: -5 },
       },
     ],
   },
@@ -188,6 +191,7 @@ const STORY = {
     chapter: '第三章·文壇',
     scene: { icon: '廟', title: '韓退之來訪' },
     speaker: 'hanyu',
+    achievement: 'hanyu_respect',
     text: '子厚，你的《捕蛇者說》我已拜讀過了。\n文章確實很好，但這些言論傳到京城，恐怕……\n我並非要你沉默，只是——有些話，用文章說，比用奏折說，更加危險。',
     useAI: true,
     aiPrompt: '韓愈以長者身份勸告柳宗元，說明在政治敏感時期，批評時弊的文章雖然有力，但也可能帶來更嚴重的政治後果。韓愈對柳宗元的文才十分欣賞，但建議他謹慎。引用儒家思想。',
@@ -197,18 +201,23 @@ const STORY = {
         nextId: 'ch3_prudent_path',
         fateDelta: +10,
         flag: 'prudent',
+        relDelta: { hanyu: +25, emperor: +5 },
       },
       {
         text: '文章如果不能說真話，與沉默有什麼分別？我的筆下，只有真情實感。',
         nextId: 'ch3_brave_path',
         fateDelta: +5,
         flag: 'brave_writing',
+        relDelta: { hanyu: +10, emperor: -5 },
+        achievement: 'brave_pen',
+        collectWork: 'bushezheshuo',
       },
       {
         text: '退之，你可以代我向皇上說幾句好話嗎？',
         nextId: 'ch3_ask_hanyu_help',
         fateDelta: +5,
         flag: 'seek_help',
+        relDelta: { hanyu: +15 },
       },
     ],
   },
@@ -262,18 +271,21 @@ const STORY = {
         nextId: 'ch4_submit',
         fateDelta: +20,
         flag: 'submit_emperor',
+        relDelta: { emperor: +30, wangshuwwen: -15 },
       },
       {
         text: '陛下，永貞革新是為了大唐百姓，臣並不後悔，只希望陛下能明察。',
         nextId: 'ch4_defend',
         fateDelta: -5,
         flag: 'defend_reform',
+        relDelta: { emperor: -15, wangshuwwen: +20, liuyuxi: +10 },
       },
       {
         text: '臣不求恢復官職，只求在柳州盡力治理百姓，報答陛下的恩情。',
         nextId: 'ch4_offer_service',
         fateDelta: +15,
         flag: 'liuzhou_path',
+        relDelta: { emperor: +15, fisherman: +5 },
       },
     ],
   },
@@ -285,7 +297,7 @@ const STORY = {
     speaker: 'emperor',
     text: '柳宗元能知錯改過，這是非常好的事情。\n但京中舊事未息，朕命你擔任柳州刺史，\n好好治理百姓，不要再生事端。',
     choices: [],
-    next: 'ending_check',
+    next: 'ch5_liuzhou_arrive',
   },
 
   ch4_defend: {
@@ -293,9 +305,9 @@ const STORY = {
     chapter: '第四章·直諫',
     scene: { icon: '鳴', title: '直言陳情' },
     speaker: 'emperor',
-    text: '（皇上微微動怒）\n柳宗元，你這是……\n算了。你的文章朕都讀過，確實是個人才。\n但這件事，讓朕再考慮考慮。',
+    text: '（皇上微微動怒）\n柳宗元，你這是……\n算了。你的文章朕都讀過，確實是個人才。\n但此事，讓朕再考慮考慮。最終仍命你赴任柳州刺史。',
     choices: [],
-    next: 'ending_check',
+    next: 'ch5_liuzhou_arrive',
   },
 
   ch4_offer_service: {
@@ -304,6 +316,153 @@ const STORY = {
     scene: { icon: '葉', title: '請命柳州' },
     speaker: 'emperor',
     text: '柳州……確實偏遠。\n你既然有這份心意，就去吧。\n朕要看看你在柳州能有什麼作為。',
+    choices: [],
+    next: 'ch5_liuzhou_arrive',
+  },
+
+  /* ============================================================
+     第五章：柳州刺史（新增）
+  ============================================================ */
+  ch5_liuzhou_arrive: {
+    id: 'ch5_liuzhou_arrive',
+    chapter: '第五章·柳州',
+    scene: { icon: '城', title: '柳州刺史府' },
+    speaker: 'liuzongyuan',
+    achievement: 'liuzhou_gov',
+    text: '元和十年，我終於離開了永州，卻不是回到京城——\n而是被改派至柳州擔任刺史。\n柳州，廣西邊陲，貧窮落後，瘴氣瀰漫。\n但……至少我可以為百姓做些事了。',
+    choices: [],
+    next: 'ch5_slave_problem',
+  },
+
+  ch5_slave_problem: {
+    id: 'ch5_slave_problem',
+    chapter: '第五章·柳州',
+    scene: { icon: '鎖', title: '典押陋俗' },
+    speaker: 'liuzongyuan',
+    text: '柳州有一惡俗：貧民因借錢無力還債，便將子女「典押」給富人作奴婢。\n利滾利之下，根本無力贖回，等同賣身為奴。\n你是父母官，面對這個制度，你打算——',
+    choices: [
+      {
+        text: '頒布命令：官府協助計算利息，貧民只需按本金贖回子女。',
+        nextId: 'ch5_free_slaves',
+        fateDelta: +15,
+        flag: 'free_slaves',
+        relDelta: { fisherman: +15, emperor: -5 },
+        achievement: 'free_slaves',
+      },
+      {
+        text: '此制由來已久，強行改變恐生爭議，先穩定政局再說。',
+        nextId: 'ch5_cautious',
+        fateDelta: +5,
+        relDelta: { emperor: +5 },
+      },
+    ],
+  },
+
+  ch5_free_slaves: {
+    id: 'ch5_free_slaves',
+    chapter: '第五章·柳州',
+    scene: { icon: '仁', title: '釋放奴婢' },
+    speaker: 'liuzongyuan',
+    text: '命令頒布後，柳州百姓感激涕零。\n數百名被典押的孩子得到釋放，重新與家人團聚。\n\n（歷史記載：柳宗元在柳州大力推行此政，被後世視為仁政的典範。）',
+    choices: [],
+    next: 'ch5_build_wells',
+  },
+
+  ch5_cautious: {
+    id: 'ch5_cautious',
+    chapter: '第五章·柳州',
+    scene: { icon: '慮', title: '謹慎觀察' },
+    speaker: 'liuzongyuan',
+    text: '你決定暫時按捺，先觀察局勢。\n但那些被典押的孩子，每一天都在受苦……\n你把精力先放在其他政務上，心中帶著一絲遺憾。',
+    choices: [],
+    next: 'ch5_build_wells',
+  },
+
+  ch5_build_wells: {
+    id: 'ch5_build_wells',
+    chapter: '第五章·柳州',
+    scene: { icon: '井', title: '鑿井引水' },
+    speaker: 'liuzongyuan',
+    text: '柳州缺乏乾淨水源，百姓長期飲用含毒之水，染病者眾。\n你想組織工程，在城中鑿井引水。\n但這需要資金——你打算怎麼辦？',
+    choices: [
+      {
+        text: '用自己的俸祿和節省的官府存款，先動工，再補報朝廷。',
+        nextId: 'ch5_wells_built',
+        fateDelta: +12,
+        flag: 'build_wells',
+        relDelta: { fisherman: +15, liuyuxi: +5 },
+        achievement: 'build_wells_ach',
+        collectWork: 'zhongliuxi',
+      },
+      {
+        text: '先上書請求朝廷撥款，一切按程序辦理。',
+        nextId: 'ch5_wells_wait',
+        fateDelta: +5,
+        relDelta: { emperor: +5 },
+      },
+    ],
+  },
+
+  ch5_wells_built: {
+    id: 'ch5_wells_built',
+    chapter: '第五章·柳州',
+    scene: { icon: '水', title: '清泉入城' },
+    speaker: 'liuzongyuan',
+    text: '你動員工匠，在柳州城中鑿了多口水井。\n清水入城的那一天，百姓歡呼雀躍。\n（歷史記載：柳宗元鑿井的政績至今仍在柳州留有紀念碑。）',
+    choices: [],
+    next: 'ch5_school',
+  },
+
+  ch5_wells_wait: {
+    id: 'ch5_wells_wait',
+    chapter: '第五章·柳州',
+    scene: { icon: '待', title: '等待批覆' },
+    speaker: 'liuzongyuan',
+    text: '幾個月後，朝廷終於撥款，水井工程緩慢啟動。\n雖然慢了一些，但程序合法，你心安理得。\n只是百姓等待的日子，又多了幾分苦楚。',
+    choices: [],
+    next: 'ch5_school',
+  },
+
+  ch5_school: {
+    id: 'ch5_school',
+    chapter: '第五章·柳州',
+    scene: { icon: '學', title: '興辦學校' },
+    speaker: 'liuzongyuan',
+    text: '柳州地處偏遠，讀書識字的人極少，民智未開。\n你是唐宋八大家之一，最懂文字的力量。\n在政務繁忙之餘，你決定——',
+    choices: [
+      {
+        text: '親自教書，開辦學堂，把知識帶給柳州孩子。',
+        nextId: 'ch5_school_built',
+        fateDelta: +15,
+        flag: 'school_found',
+        relDelta: { fisherman: +15, liuyuxi: +10 },
+        achievement: 'school_found_ach',
+      },
+      {
+        text: '政務繁重，教育的事留給後任官員吧。',
+        nextId: 'ch5_final_node',
+        fateDelta: +5,
+      },
+    ],
+  },
+
+  ch5_school_built: {
+    id: 'ch5_school_built',
+    chapter: '第五章·柳州',
+    scene: { icon: '書', title: '學堂初立' },
+    speaker: 'liuzongyuan',
+    text: '你用課餘時間給孩子們上課，教他們識字、讀詩，講述天下的道理。\n有個孩子問你：「先生，為什麼好人要受苦呢？」\n你沉默片刻，說：「因為好人，選擇了承擔。」',
+    choices: [],
+    next: 'ch5_final_node',
+  },
+
+  ch5_final_node: {
+    id: 'ch5_final_node',
+    chapter: '第五章·柳州',
+    scene: { icon: '月', title: '柳州之夜' },
+    speaker: 'liuzongyuan',
+    collectWork: 'dengliuzhou',
+    text: '元和十四年（819年），你已在柳州任職三年。\n身體每況愈下，瘴氣侵體，病痛纏身。\n但你的書桌上，仍堆滿了奏折和文稿。\n\n遠方的劉禹錫來信說，他也即將被調任，兩人或許很快就能相見。\n可惜，這封信——是你們最後的來往……',
     choices: [],
     next: 'ending_check',
   },
@@ -318,7 +477,7 @@ const STORY = {
     speaker: 'liuzongyuan',
     text: '（柳宗元靜靜望向那片江雪，心中已有了答案……）',
     choices: [],
-    next: '__ending__', // 由 GameEngine 根據命運值與旗標決定
+    next: '__ending__',
   },
 };
 
@@ -336,6 +495,18 @@ const ENDINGS = {
     history: '⚠️ 這是柳宗元真實的歷史結局。他雖未能返京，卻以文學和地方政績留名青史。',
     minFate: 0,
     requiredFlags: [],
+  },
+
+  liuzhou_legend: {
+    id: 'liuzhou_legend',
+    seal: '牧',
+    title: '柳州傳奇',
+    poem: '釋奴婢以施仁政，\n鑿清井以利萬民。\n辦學堂育後來人，\n柳州城立德政碑。',
+    desc: '你在柳州的三年，做出了令人敬仰的施政：\n釋放典押奴婢，讓數百家庭重聚；\n鑿井引水，改善百姓飲水安全；\n創辦學堂，為偏遠之地帶來文明之光。\n\n柳宗元於元和十四年病逝，享年僅四十七歲。\n柳州百姓為他立碑，世代紀念。\n史書記載：「民皆哭泣，如喪父母。」',
+    tags: ['仁政路線', '柳州牧民', '歷史最佳'],
+    history: '★ 這是最接近柳宗元歷史功績的結局。他在柳州的政績被後世譽為中國古代地方官員仁政的典範。',
+    minFate: 55,
+    requiredFlags: ['free_slaves', 'build_wells', 'school_found'],
   },
 
   literary: {
@@ -369,7 +540,7 @@ const ENDINGS = {
     poem: '千山萬徑本無人，\n蓑笠漁翁自在身。\n名利浮雲皆散去，\n一竿釣盡古今春。',
     desc: '柳宗元受漁翁點化，看透了仕途的虛妄，\n選擇在永州山水間終老，著書立說，廣收弟子。\n他成為了那個時代最自由的靈魂，如《江雪》詩中的漁翁一般，超然物外。',
     tags: ['隱逸路線', '道家超脫', '假設歷史'],
-    history: '葉 這是假設的歷史分支。現實中柳宗元並未真正歸隱，但詩中漁翁的意象被認為是他內心的投射。',
+    history: '🍃 這是假設的歷史分支。現實中柳宗元並未真正歸隱，但詩中漁翁的意象被認為是他內心的投射。',
     minFate: 55,
     requiredFlags: ['dao_wisdom'],
   },
@@ -389,12 +560,11 @@ const ENDINGS = {
 
 /**
  * 根據命運值和旗標決定結局
- * @param {number} fate
- * @param {Set} flags
- * @returns {object} ending
  */
 function determineEnding(fate, flags) {
   if (flags.has('despair') && fate < 30) return ENDINGS.tragedy;
+  if (flags.has('free_slaves') && flags.has('build_wells') && flags.has('school_found') && fate >= 55)
+    return ENDINGS.liuzhou_legend;
   if (flags.has('dao_wisdom') && fate >= 55) return ENDINGS.hermit;
   if (flags.has('reform_spirit') && fate >= 65) return ENDINGS.reform;
   if (flags.has('wenxue_achievement') && fate >= 40) return ENDINGS.literary;

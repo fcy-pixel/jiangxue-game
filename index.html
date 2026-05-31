@@ -6,7 +6,7 @@
   <title>江雪·問天 — 柳宗元的選擇</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@300;400;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=69029f7" />
+  <link rel="stylesheet" href="css/style.css?v=rpg1" />
 </head>
 <body>
   <!-- 雪花效果 -->
@@ -139,6 +139,10 @@
         </div>
         <span id="fate-value">50</span>
       </div>
+      <div class="topbar-actions">
+        <button class="topbar-btn" onclick="GameEngine.toggleCollection()" title="典籍收藏">典籍</button>
+        <button class="topbar-btn" onclick="GameEngine.toggleAchievements()" title="成就">成就</button>
+      </div>
     </div>
 
     <!-- 柳宗元心境修行 -->
@@ -173,6 +177,14 @@
           <span class="portrait-char" id="portrait-char"></span>
         </div>
         <div class="portrait-name" id="portrait-name">柳宗元</div>
+        <!-- 好感度條 -->
+        <div class="char-affinity" id="char-affinity" style="display:none">
+          <span class="affinity-label" id="affinity-label">相識</span>
+          <div class="affinity-track">
+            <div class="affinity-fill" id="affinity-fill"></div>
+          </div>
+          <span class="affinity-value" id="affinity-value">45</span>
+        </div>
       </div>
       <div class="dialogue-box">
         <div class="dialogue-text" id="dialogue-text">
@@ -226,6 +238,10 @@
       <div class="ending-mind" id="ending-mind"></div>
       <div class="ending-tags" id="ending-tags"></div>
       <div class="ending-history" id="ending-history"></div>
+      <!-- 人脈情誼（角色養成系統）-->
+      <div class="ending-relations" id="ending-relations"></div>
+      <!-- 收藏/成就統計 -->
+      <div class="ending-stats" id="ending-stats"></div>
       <button class="btn-ancient" onclick="GameEngine.restart()">重新踏上旅途</button>
     </div>
   </div>
@@ -238,10 +254,57 @@
     </div>
   </div>
 
-  <script src="js/characters.js?v=69029f7"></script>
-  <script src="js/story.js?v=69029f7"></script>
-  <script src="js/music.js?v=69029f7"></script>
-  <script src="js/game.js?v=69029f7"></script>
+  <!-- ==================== 典籍收藏 面板 ==================== -->
+  <div id="panel-collection" class="panel-overlay" style="display:none">
+    <div class="panel-inner">
+      <div class="panel-header">
+        <h2 class="panel-title">典籍 · 心法</h2>
+        <div class="panel-tabs">
+          <button class="panel-tab active" data-tab="works" onclick="GameEngine.switchCollectionTab('works')">典籍收藏</button>
+          <button class="panel-tab" data-tab="skills" onclick="GameEngine.switchCollectionTab('skills')">已習心法</button>
+        </div>
+        <button class="panel-close" onclick="GameEngine.toggleCollection()">✕</button>
+      </div>
+      <div id="collection-body" class="panel-body collection-grid"></div>
+      <p class="panel-hint">典籍記錄柳宗元的傳世之作；心法記錄你選擇的人生道路。重玩可解鎖更多。</p>
+    </div>
+  </div>
+
+  <!-- ==================== 成就 面板 ==================== -->
+  <div id="panel-achievements" class="panel-overlay" style="display:none">
+    <div class="panel-inner">
+      <div class="panel-header">
+        <h2 class="panel-title">成就</h2>
+        <button class="panel-close" onclick="GameEngine.toggleAchievements()">✕</button>
+      </div>
+      <div id="achievement-grid" class="panel-body achievement-grid"></div>
+      <p class="panel-hint">完成不同路線與選擇，解鎖全部 14 個成就</p>
+    </div>
+  </div>
+
+  <!-- ==================== 境界突破 特效 ==================== -->
+  <div id="realm-breakthrough" style="display:none">
+    <div class="realm-rays"></div>
+    <div class="realm-content">
+      <div class="realm-kicker">心境突破</div>
+      <div class="realm-name" id="breakthrough-name">永州照心</div>
+      <div class="realm-note" id="breakthrough-note">開始用山水照見自己的痛苦</div>
+    </div>
+  </div>
+
+  <!-- ==================== 解鎖通知 Toast ==================== -->
+  <div id="unlock-toast" style="display:none">
+    <div class="unlock-toast-icon" id="unlock-toast-icon">📜</div>
+    <div class="unlock-toast-text">
+      <div class="unlock-toast-type" id="unlock-toast-type">典籍獲得</div>
+      <div class="unlock-toast-name" id="unlock-toast-name">《江雪》</div>
+    </div>
+  </div>
+
+  <script src="js/characters.js?v=rpg1"></script>
+  <script src="js/story.js?v=rpg1"></script>
+  <script src="js/music.js?v=rpg1"></script>
+  <script src="js/game.js?v=rpg1"></script>
 
   <!-- 音樂控制 -->
   <button class="music-toggle" id="music-toggle" onclick="AmbientMusic.toggle()" title="古典音樂">&#9834;</button>
