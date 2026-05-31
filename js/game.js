@@ -4,9 +4,62 @@
  */
 
 const GameEngine = (() => {
+  const START_MIND = {
+    ideal: 35,
+    solitude: 35,
+    compassion: 35,
+    writing: 35,
+  };
+
+  const MIND_LABELS = {
+    ideal: '理想',
+    solitude: '孤寂',
+    compassion: '民心',
+    writing: '文心',
+  };
+
+  const MIND_REALMS = [
+    { min: 0, title: '寒江初醒', note: '仍在失意與理想之間徘徊' },
+    { min: 165, title: '永州照心', note: '開始用山水照見自己的痛苦' },
+    { min: 195, title: '文以載道', note: '懂得把苦難、民生與思想寫進文章' },
+    { min: 225, title: '孤舟問天', note: '在孤獨中仍守住人格與信念' },
+    { min: 255, title: '子厚成章', note: '把貶謫鍛造成文學與精神力量' },
+  ];
+
+  const FLAG_MIND_EFFECTS = {
+    reform_spirit: { ideal: 16, solitude: 4 },
+    literary_path: { writing: 15, solitude: 4 },
+    despair: { solitude: 18, ideal: -8 },
+    wenxue_achievement: { writing: 18, solitude: 6 },
+    seek_recall: { ideal: 8, writing: 6 },
+    dao_wisdom: { solitude: 10, writing: 8, compassion: 4 },
+    prudent: { writing: 8, solitude: 8 },
+    brave_writing: { ideal: 10, compassion: 12, writing: 8 },
+    seek_help: { writing: 8, compassion: 4 },
+    submit_emperor: { solitude: 8, ideal: -4 },
+    defend_reform: { ideal: 14, compassion: 8 },
+    liuzhou_path: { compassion: 18, writing: 4 },
+  };
+
+  const FLAG_INSIGHTS = {
+    reform_spirit: '你把柳宗元心中的改革火種重新點起：即使身在永州，理想仍未熄滅。',
+    literary_path: '你讓柳宗元轉向文章與山水，把失意化成可以流傳後世的文字。',
+    despair: '你觸碰到柳宗元最深的黑暗：被貶不是單純離開京城，而是被時代拋下的孤獨。',
+    wenxue_achievement: '你看見永州山水如何成為柳宗元的心靈出口，文心因此更清澈。',
+    seek_recall: '你仍盼望回到廟堂，這份期待讓柳宗元在現實與尊嚴之間拉扯。',
+    dao_wisdom: '漁翁的話使你明白：真正的超脫不是放棄人生，而是先安頓自己的心。',
+    prudent: '你學會把鋒芒藏入山水文字，柳宗元的沉着與忍耐因此增加。',
+    brave_writing: '你選擇讓文章替百姓發聲，柳宗元的文學不再只是抒情，而有了道義重量。',
+    seek_help: '你願意接受朋友的幫助，也看見文壇聲望可能成為柳宗元重回歷史中心的道路。',
+    submit_emperor: '你選擇低頭保存餘生，這不是單純懦弱，而是柳宗元在政治壓力下的艱難權衡。',
+    defend_reform: '你讓柳宗元直面皇權，說出改革初心；代價很高，但人格更清楚。',
+    liuzhou_path: '你把理想轉向地方治理，讓柳宗元從政治失敗走向真正貼近百姓的實踐。',
+  };
+
   /* ---------- 狀態 ---------- */
   let state = {
     fate: 50,
+    mind: { ...START_MIND },
     flags: new Set(),
     currentNodeId: 'start',
     apiKey: '',
@@ -34,6 +87,7 @@ const GameEngine = (() => {
   /* ---------- 開始遊戲 ---------- */
   function startGame() {
     state.fate = 50;
+    state.mind = { ...START_MIND };
     state.flags = new Set();
     state.currentNodeId = 'start';
     state.history = [];
@@ -41,6 +95,7 @@ const GameEngine = (() => {
     state.currentChar = null;
 
     showScreen('screen-game');
+    updateMindPanel();
     renderNode('start');
   }
 
@@ -102,6 +157,7 @@ const GameEngine = (() => {
     // 更新頂欄
     $('chapter-title').textContent = node.chapter || '';
     updateFateBar();
+    updateMindPanel();
 
     // 更新場景
     if (node.scene) {
@@ -372,7 +428,21 @@ const GameEngine = (() => {
     choices.forEach(choice => {
       const btn = document.createElement('button');
       btn.className = 'choice-btn';
-      btn.textContent = choice.text;
+
+      const textEl = document.createElement('span');
+      textEl.className = 'choice-text';
+      textEl.textContent = choice.text;
+      btn.appendChild(textEl);
+
+      const mindDelta = getChoiceMindDelta(choice);
+      const effectText = formatMindDelta(mindDelta);
+      if (effectText) {
+        const effectEl = document.createElement('span');
+        effectEl.className = 'choice-effect';
+        effectEl.textContent = effectText;
+        btn.appendChild(effectEl);
+      }
+
       btn.onclick = () => selectChoice(choice);
       area.appendChild(btn);
     });
@@ -384,6 +454,9 @@ const GameEngine = (() => {
     if (choice.fateDelta) {
       state.fate = Math.max(0, Math.min(100, state.fate + choice.fateDelta));
     }
+    applyMindDelta(getChoiceMindDelta(choice));
+    updateMindPanel();
+    showMindInsight(choice);
     // 設置旗標
     if (choice.flag) {
       state.flags.add(choice.flag);
@@ -414,6 +487,7 @@ const GameEngine = (() => {
     $('ending-title').textContent = ending.title;
     $('ending-poem').innerHTML = ending.poem.replace(/\n/g, '<br>');
     $('ending-desc').innerHTML = ending.desc.replace(/\n/g, '<br>');
+    $('ending-mind').innerHTML = buildEndingMindSummary();
     $('ending-history').textContent = ending.history;
 
     const tagsEl = $('ending-tags');
@@ -426,6 +500,91 @@ const GameEngine = (() => {
     });
 
     showScreen('screen-ending');
+  }
+
+  /* ---------- 心境修行 ---------- */
+  function getMindTotal() {
+    return Object.values(state.mind).reduce((sum, value) => sum + value, 0);
+  }
+
+  function getMindRealm() {
+    const total = getMindTotal();
+    return MIND_REALMS.reduce((best, realm) => total >= realm.min ? realm : best, MIND_REALMS[0]);
+  }
+
+  function getChoiceMindDelta(choice) {
+    return choice.mindDelta || FLAG_MIND_EFFECTS[choice.flag] || {};
+  }
+
+  function applyMindDelta(delta) {
+    Object.entries(delta).forEach(([key, value]) => {
+      const current = state.mind[key] ?? 0;
+      state.mind[key] = Math.max(0, Math.min(99, current + value));
+    });
+  }
+
+  function formatMindDelta(delta) {
+    return Object.entries(delta)
+      .map(([key, value]) => `${MIND_LABELS[key]} ${value > 0 ? '+' : ''}${value}`)
+      .join(' · ');
+  }
+
+  function updateMindPanel() {
+    const realm = getMindRealm();
+    const titleEl = $('mind-realm-title');
+    if (!titleEl) return;
+
+    titleEl.textContent = realm.title;
+    $('mind-realm-note').textContent = realm.note;
+    Object.keys(MIND_LABELS).forEach(key => {
+      const value = state.mind[key];
+      const valueEl = $(`mind-${key}-value`);
+      const fillEl = $(`mind-${key}-fill`);
+      if (valueEl) valueEl.textContent = value;
+      if (fillEl) fillEl.style.width = value + '%';
+    });
+  }
+
+  function showMindInsight(choice) {
+    const insight = choice.insight || FLAG_INSIGHTS[choice.flag];
+    const effectText = formatMindDelta(getChoiceMindDelta(choice));
+    if (!insight && !effectText) return;
+
+    let toast = document.getElementById('mind-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'mind-toast';
+      toast.className = 'mind-toast';
+      document.body.appendChild(toast);
+    }
+
+    toast.innerHTML = `
+      <strong>心境變化</strong>
+      ${effectText ? `<span>${effectText}</span>` : ''}
+      ${insight ? `<p>${insight}</p>` : ''}
+    `;
+    toast.classList.add('show');
+    clearTimeout(toast._timer);
+    toast._timer = setTimeout(() => toast.classList.remove('show'), 4200);
+  }
+
+  function buildEndingMindSummary() {
+    const realm = getMindRealm();
+    const strongest = Object.keys(state.mind).sort((a, b) => state.mind[b] - state.mind[a])[0];
+    const strongestText = {
+      ideal: '你塑造出的柳宗元，最強的是改革理想。他即使失勢，仍相信文章與行動可以回應時代。',
+      solitude: '你塑造出的柳宗元，最深的是孤獨感。他在寒江與永州山水之中，學會與失意共處。',
+      compassion: '你塑造出的柳宗元，最重的是民心。他把自己的苦難連到百姓身上，關心制度如何影響人民。',
+      writing: '你塑造出的柳宗元，最亮的是文心。他把政治挫敗和山水體驗，鍛造成可傳千古的文字。',
+    }[strongest];
+
+    return `
+      <div class="ending-mind-title">心境境界：${realm.title}</div>
+      <p>${realm.note}。${strongestText}</p>
+      <div class="ending-mind-stats">
+        ${Object.entries(MIND_LABELS).map(([key, label]) => `<span>${label} ${state.mind[key]}</span>`).join('')}
+      </div>
+    `;
   }
 
   /* ---------- 更新命運指數條 ---------- */

@@ -109,11 +109,11 @@
             </div>
             <div class="bg-how-item">
               <div class="bg-how-icon">運</div>
-              <div class="bg-how-text"><strong>命運指數影響結局</strong><br>頂部的命運指數會隨選擇起伏，最終決定你走向哪個結局。</div>
+              <div class="bg-how-text"><strong>命運與心境共同成長</strong><br>每個選擇會改變命運指數，也會提升理想、孤寂、民心、文心。</div>
             </div>
             <div class="bg-how-item">
               <div class="bg-how-icon">局</div>
-              <div class="bg-how-text"><strong>四種結局，可以重玩</strong><br>史、文、革、隱——每次重玩都可能解鎖不同的結局。</div>
+              <div class="bg-how-text"><strong>重玩探索內心世界</strong><br>史、文、革、隱——不同抉擇會塑造不同的柳宗元心境。</div>
             </div>
           </div>
         </section>
@@ -138,6 +138,21 @@
           <div class="fate-fill" id="fate-fill"></div>
         </div>
         <span id="fate-value">50</span>
+      </div>
+    </div>
+
+    <!-- 柳宗元心境修行 -->
+    <div class="mind-panel" id="mind-panel" aria-label="柳宗元心境修行">
+      <div class="mind-realm">
+        <span class="mind-kicker">心境修行</span>
+        <strong id="mind-realm-title">寒江初醒</strong>
+        <small id="mind-realm-note">仍在失意與理想之間徘徊</small>
+      </div>
+      <div class="mind-stats" id="mind-stats">
+        <div class="mind-stat" data-mind="ideal"><span>理想</span><b id="mind-ideal-value">35</b><i><em id="mind-ideal-fill"></em></i></div>
+        <div class="mind-stat" data-mind="solitude"><span>孤寂</span><b id="mind-solitude-value">35</b><i><em id="mind-solitude-fill"></em></i></div>
+        <div class="mind-stat" data-mind="compassion"><span>民心</span><b id="mind-compassion-value">35</b><i><em id="mind-compassion-fill"></em></i></div>
+        <div class="mind-stat" data-mind="writing"><span>文心</span><b id="mind-writing-value">35</b><i><em id="mind-writing-fill"></em></i></div>
       </div>
     </div>
 
@@ -208,6 +223,7 @@
       <h1 class="ending-title" id="ending-title">歷史結局</h1>
       <div class="ending-poem" id="ending-poem"></div>
       <p class="ending-desc" id="ending-desc"></p>
+      <div class="ending-mind" id="ending-mind"></div>
       <div class="ending-tags" id="ending-tags"></div>
       <div class="ending-history" id="ending-history"></div>
       <button class="btn-ancient" onclick="GameEngine.restart()">重新踏上旅途</button>
